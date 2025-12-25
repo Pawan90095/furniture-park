@@ -7,14 +7,30 @@ export default function ForgotPassword() {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            setSubmitted(true);
+        const API_URL = import.meta.env.VITE_API_URL || '';
+
+        try {
+            const res = await fetch(`${API_URL}/api/users/forgotpassword`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setSubmitted(true);
+            } else {
+                alert(data.message || 'Something went wrong');
+            }
+        } catch (error) {
+            alert('Failed to connect to server');
+        } finally {
             setLoading(false);
-        }, 1500);
+        }
     };
 
     return (

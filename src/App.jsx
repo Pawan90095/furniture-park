@@ -26,6 +26,7 @@ const Checkout = lazy(() => import('./pages/Checkout'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const About = lazy(() => import('./pages/About'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // Account Pages
@@ -92,7 +93,9 @@ function App() {
 
                                 {/* User Auth Routes */}
                                 <Route path="/login" element={<Login />} />
+                                <Route path="/login" element={<Login />} />
                                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                                <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
                                 <Route path="/signup" element={<Signup />} />
 
                                 {/* User Dashboard Routes */}
