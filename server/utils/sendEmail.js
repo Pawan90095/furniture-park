@@ -13,19 +13,18 @@ const sendEmail = async (options) => {
             rejectUnauthorized: false
         }
     });
-});
 
-const message = {
-    from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
-    to: options.email,
-    subject: options.subject,
-    text: options.message,
-    // html: options.html // Can add HTML templates later
-};
+    const message = {
+        from: `${process.env.FROM_NAME} <${process.env.SMTP_EMAIL}>`,
+        to: options.email,
+        subject: options.subject,
+        text: options.message,
+        // html: options.html // Can add HTML templates later
+    };
 
-const info = await transporter.sendMail(message);
+    const info = await transporter.sendMail(message);
 
-console.log('Message sent: %s', info.messageId);
+    console.log('Message sent: %s', info.messageId);
 };
 
 export default sendEmail;
