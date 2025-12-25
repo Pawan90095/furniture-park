@@ -1,36 +1,28 @@
-import React, { useState } from 'react';
-import { useCart } from '../context/CartContext';
-import { useNavigate } from 'react-router-dom';
-import { CreditCard, Truck, Banknote, ArrowRight, Loader2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+// ... (imports remain same)
+import { useStore } from '../store/useStore'; // Added useStore import
 
 export default function Checkout() {
     const { cart, clearCart, cartTotal } = useCart();
+    const { user, createOrder } = useStore(); // Get user and createOrder
     const navigate = useNavigate();
     const subtotal = cartTotal;
-    const shipping = subtotal > 50000 ? 0 : 500; // Updated threshold and cost
+    const shipping = subtotal > 50000 ? 0 : 500;
     const total = subtotal + shipping;
 
     const [paymentMethod, setPaymentMethod] = useState('card');
     const [isProcessing, setIsProcessing] = useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [formData, setFormData] = useState({
+        firstName: user?.name?.split(' ')[0] || '',
+        lastName: user?.name?.split(' ')[1] || '',
+        email: user?.email || '',
+        address: '',
+        city: '',
+        pincode: '',
+        phone: '',
+    });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setIsProcessing(true);
-        // Simulate order placement
-        setTimeout(() => {
-            clearCart();
-            setIsProcessing(false);
-            navigate('/order-success');
-        }, 2000);
-    };
-
-    if (cart.length === 0 && !isProcessing) {
-        // If cart is empty, redirect to shop or show empty message. 
-        // But allow component to render briefly or handle redirect in useEffect
-    }
-
-    // Better to handle redirect in effect to avoid render issues
+    // ... (useEffect redirect logic remains same)
     React.useEffect(() => {
         if (cart.length === 0 && !isProcessing) {
             navigate('/shop');
@@ -39,9 +31,114 @@ export default function Checkout() {
 
     if (cart.length === 0) return null;
 
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handlePlaceOrderClick = (e) => {
+        e.preventDefault();
+        // Basic Validation
+        if (!formData.address || !formData.phone) {
+            alert("Please fill in all shipping details.");
+            return;
+        }
+        setShowPaymentModal(true);
+    };
+
+    const handleConfirmPayment = async () => {
+        setIsProcessing(true);
+
+        // Simulate Payment Delay
+        setTimeout(async () => {
+            // Prepare Order Data
+            const orderData = {
+                orderItems: cart.map(item => ({
+                    name: item.name,
+                    qty: item.quantity,
+                    image: item.image,
+                    price: item.price,
+                    product: item.id
+                })),
+                shippingAddress: {
+                    address: formData.address,
+                    city: formData.city,
+                    postalCode: formData.pincode,
+                    country: 'India' // Hardcoded for now
+                },
+                paymentMethod: paymentMethod === 'upi' ? 'UPI' : 'Card',
+                paymentResult: {
+                    id: 'mock_payment_' + Math.floor(Math.random() * 100000),
+                    status: 'COMPLETED',
+                    update_time: new Date().toISOString(),
+                    email_address: formData.email
+                },
+                itemsPrice: subtotal,
+                shippingPrice: shipping,
+                taxPrice: 0,
+                totalPrice: total
+            };
+
+            const result = await createOrder(orderData);
+
+            setIsProcessing(false);
+            setShowPaymentModal(false);
+
+            if (result.success) {
+                navigate('/order-success');
+            } else {
+                alert('Order Failed: ' + (result.message || 'Unknown Error'));
+            }
+        }, 2000);
+    };
+
     return (
-        <div className="pt-32 pb-16 min-h-screen bg-background">
+        <div className="pt-32 pb-16 min-h-screen bg-background relative">
+            {/* Payment Modal */}
+            {showPaymentModal && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-white rounded-lg shadow-2xl p-6 max-w-sm w-full"
+                    >
+                        <h3 className="text-xl font-bold mb-4 font-serif text-primary">Confirm Payment</h3>
+                        <div className="mb-6 space-y-3">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-600">Amount to Pay</span>
+                                <span className="font-bold text-lg">₹{total.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-600">Method</span>
+                                <span className="uppercase font-medium">{paymentMethod}</span>
+                            </div>
+                            <div className="bg-blue-50 p-3 rounded text-xs text-blue-700">
+                                <span className="font-bold block mb-1">Mock Gateway</span>
+                                Click "Pay Now" to simulate a successful transaction.
+                            </div>
+                        </div>
+                        <div className="flex space-x-3">
+                            <button
+                                onClick={() => setShowPaymentModal(false)}
+                                disabled={isProcessing}
+                                className="flex-1 py-3 border border-gray-300 rounded font-bold text-gray-600 hover:bg-gray-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleConfirmPayment}
+                                disabled={isProcessing}
+                                className="flex-1 py-3 bg-green-600 text-white rounded font-bold hover:bg-green-700 flex justify-center items-center gap-2"
+                            >
+                                {isProcessing && <Loader2 className="animate-spin" size={16} />}
+                                {isProcessing ? 'Paying...' : 'Pay Now'}
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* ... (Header remains same) */}
                 <h1 className="text-4xl font-serif font-bold text-primary mb-12 text-center">Checkout</h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -52,43 +149,43 @@ export default function Checkout() {
                         transition={{ duration: 0.5 }}
                     >
                         <h2 className="text-xl font-serif font-bold mb-6 border-b border-gray-200 pb-2">Shipping Information</h2>
-                        <form id="checkout-form" onSubmit={handleSubmit} className="space-y-6">
+                        <form id="checkout-form" onSubmit={handlePlaceOrderClick} className="space-y-6">
                             <div className="grid grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">First Name</label>
-                                    <input required type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                    <input required name="firstName" value={formData.firstName} onChange={handleInputChange} type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Last Name</label>
-                                    <input required type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                    <input required name="lastName" value={formData.lastName} onChange={handleInputChange} type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                                 </div>
                             </div>
 
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email Address</label>
-                                <input required type="email" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                <input required name="email" value={formData.email} onChange={handleInputChange} type="email" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                             </div>
 
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Street Address</label>
-                                <input required type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                <input required name="address" value={formData.address} onChange={handleInputChange} type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                             </div>
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">City</label>
-                                    <input required type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                    <input required name="city" value={formData.city} onChange={handleInputChange} type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Pincode</label>
-                                    <input required type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                    <input required name="pincode" value={formData.pincode} onChange={handleInputChange} type="text" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Phone</label>
-                                    <input required type="tel" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
+                                    <input required name="phone" value={formData.phone} onChange={handleInputChange} type="tel" className="w-full bg-white border border-gray-200 px-4 py-3 rounded-sm focus:outline-none focus:border-secondary transition-colors" />
                                 </div>
                             </div>
 
@@ -126,6 +223,7 @@ export default function Checkout() {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="bg-white p-8 h-fit shadow-soft rounded-sm sticky top-28"
                     >
+                        {/* ... (Summary content remains same) */}
                         <h2 className="text-xl font-serif font-bold mb-6">Order Summary</h2>
                         <div className="space-y-4 mb-8">
                             {cart.map((item) => (
@@ -166,6 +264,7 @@ export default function Checkout() {
                             disabled={isProcessing}
                             className="w-full bg-primary text-white py-4 font-medium hover:bg-secondary transition-colors flex items-center justify-center space-x-2 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
                         >
+                            {/* ... (Original button content) */}
                             {isProcessing ? (
                                 <>
                                     <Loader2 className="animate-spin" size={20} />

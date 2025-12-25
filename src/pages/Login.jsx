@@ -18,7 +18,9 @@ export default function Login() {
         const result = await loginUser(email, password);
 
         if (result.success) {
-            navigate('/account');
+            // Redirect to the page they came from, or default to account
+            const from = location.state?.from?.pathname || '/account';
+            navigate(from, { replace: true });
         } else {
             setError(result.message || 'Invalid email or password');
         }
