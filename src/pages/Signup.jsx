@@ -9,17 +9,20 @@ export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const loginUser = useStore((state) => state.loginUser);
+    const registerUser = useStore((state) => state.registerUser);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Mock Signup
-        loginUser({
-            name: name,
-            email: email,
-            token: 'mock-jwt-token-123'
-        });
-        navigate('/account');
+
+        const result = await registerUser(name, email, password);
+
+        if (result.success) {
+            navigate('/account');
+        } else {
+            // Check if there is a way to show error in this component, currently not designed for it.
+            // For now, alert or console. In a real app, add an error state.
+            alert(result.message || 'Registration failed');
+        }
     };
 
     return (

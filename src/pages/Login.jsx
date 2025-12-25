@@ -11,17 +11,16 @@ export default function Login() {
     const navigate = useNavigate();
     const loginUser = useStore((state) => state.loginUser);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (password === '123456') {
-            loginUser({
-                name: 'Alex Johnson',
-                email: email,
-                token: 'mock-jwt-token-123'
-            });
+        setError('');
+
+        const result = await loginUser(email, password);
+
+        if (result.success) {
             navigate('/account');
         } else {
-            setError('Invalid credentials. Hint: Password is 123456');
+            setError(result.message || 'Invalid email or password');
         }
     };
 
