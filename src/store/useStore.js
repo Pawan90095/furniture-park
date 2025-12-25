@@ -148,6 +148,40 @@ export const useStore = create(persist((set, get) => ({
         }
     },
 
+    // Order Management
+    createOrder: async (orderData) => {
+        const API_URL = import.meta.env.VITE_API_URL || '';
+        try {
+            const { user, cart } = get();
+
+            // If user is logged in, attach token
+            const token = user?.token;
+
+            const res = await fetch(`${API_URL}/api/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(orderData),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Clear cart locally
+                set({ cart: [] });
+                // Add to local orders list (optional, or fetch fresh)
+                set(state => ({ orders: [data, ...state.orders] }));
+                return { success: true, order: data };
+            } else {
+                return { success: false, message: data.message };
+            }
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    },
+
     // Site Settings Updates (Admin)
     updateBannerText: async (text) => {
         const { siteSettings } = get();
