@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Work+Sans:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-background text-gray-600 font-sans antialiased;
+    }
+
+    /* Editorial Heading System */
+    h1 {
+        @apply font-display text-stone-900 font-normal leading-tight;
+    }
+
+    h2 {
+        @apply font-display text-stone-900 font-normal tracking-tight;
+    }
+
+    h3 {
+        @apply font-display text-stone-900 font-normal;
+    }
+
+    /* Sub-headings (Overlines) */
+    .overline {
+        @apply uppercase text-xs tracking-[0.2em] font-semibold text-stone-600;
+    }
+
+    /* Button Text */
+    .btn-text {
+        @apply uppercase text-xs tracking-widest font-semibold;
+    }
+}
+
+/* Custom Utilities for Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 20s linear infinite;
+}
