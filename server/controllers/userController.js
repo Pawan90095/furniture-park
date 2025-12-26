@@ -102,6 +102,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
     // If testing locally on port 5173, make sure req.headers.origin is correct or hardcode it.
     // Ideally use process.env.FRONTEND_URL
 
+    console.log(`Checking user for email: ${req.body.email}`);
+
     // Email Message
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
 

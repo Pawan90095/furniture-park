@@ -42,6 +42,9 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/settings', siteSettingsRoutes);
 app.use('/api/upload', uploadRoutes);
 
+import paymentRoutes from './routes/paymentRoutes.js';
+app.use('/api/payment', paymentRoutes);
+
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
