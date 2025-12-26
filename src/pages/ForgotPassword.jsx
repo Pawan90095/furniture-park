@@ -27,7 +27,8 @@ export default function ForgotPassword() {
                 alert(data.message || 'Something went wrong');
             }
         } catch (error) {
-            alert('Failed to connect to server');
+            console.error("Forgot Password Error:", error);
+            alert('Failed to connect to server. Make sure the backend is running.');
         } finally {
             setLoading(false);
         }

@@ -45,50 +45,157 @@ export default function Checkout() {
         setShowPaymentModal(true);
     };
 
-    const handleConfirmPayment = async () => {
-        setIsProcessing(true);
+    // Load Razorpay Script
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
 
-        // Simulate Payment Delay
-        setTimeout(async () => {
-            // Prepare Order Data
-            const orderData = {
-                orderItems: cart.map(item => ({
-                    name: item.name,
-                    qty: item.quantity,
-                    image: item.image,
-                    price: item.price,
-                    product: item.id
-                })),
-                shippingAddress: {
+    const handleConfirmPayment = async () => {
+        if (paymentMethod === 'cod') {
+            // Existing Logic for COD
+            handlePlaceOrder(null);
+            return;
+        }
+
+        setIsProcessing(true);
+        const res = await loadRazorpay();
+
+        if (!res) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            setIsProcessing(false);
+            return;
+        }
+
+        try {
+            // 1. Create Order on Backend
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const result = await fetch(`${API_URL}/api/payment/create-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: JSON.stringify({ amount: total }),
+            });
+
+            const data = await result.json();
+
+            if (!result.ok) {
+                alert(data.message || 'Server error in creating order');
+                setIsProcessing(false);
+                return;
+            }
+
+            // 2. Open Razorpay Options
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+                amount: data.amount,
+                currency: data.currency,
+                name: "Furniture Park",
+                description: "Luxury Furniture Transaction",
+                // image: "https://your-logo-url.com/logo.png",
+                order_id: data.id,
+                handler: async function (response) {
+                    // 3. Verify Payment
+                    try {
+                        const verifyRes = await fetch(`${API_URL}/api/payment/verify`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${user.token}`
+                            },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            }),
+                        });
+
+                        const verifyData = await verifyRes.json();
+
+                        if (verifyRes.ok) {
+                            // Payment Verified -> Create Order in DB
+                            handlePlaceOrder({
+                                id: response.razorpay_payment_id,
+                                status: 'COMPLETED',
+                                update_time: new Date().toISOString(),
+                                email_address: formData.email
+                            });
+                        } else {
+                            alert(verifyData.message || 'Payment Verification Failed');
+                        }
+                    } catch (error) {
+                        alert('Internal Server Error during Verification');
+                    }
+                },
+                prefill: {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    contact: formData.phone,
+                },
+                notes: {
                     address: formData.address,
-                    city: formData.city,
-                    postalCode: formData.pincode,
-                    country: 'India' // Hardcoded for now
                 },
-                paymentMethod: paymentMethod === 'upi' ? 'UPI' : 'Card',
-                paymentResult: {
-                    id: 'mock_payment_' + Math.floor(Math.random() * 100000),
-                    status: 'COMPLETED',
-                    update_time: new Date().toISOString(),
-                    email_address: formData.email
+                theme: {
+                    color: "#0F172A", // Primary Color
                 },
-                itemsPrice: subtotal,
-                shippingPrice: shipping,
-                taxPrice: 0,
-                totalPrice: total
             };
 
-            const result = await createOrder(orderData);
-
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
             setIsProcessing(false);
-            setShowPaymentModal(false);
+            // Note: processing false here because modal is open. 
+            // Ideally we want to keep it true but then if user cancels, we need to handle that.
+            // Razorpay has a modal.ondismiss which we can use.
 
-            if (result.success) {
-                navigate('/order-success');
-            } else {
-                alert('Order Failed: ' + (result.message || 'Unknown Error'));
-            }
-        }, 2000);
+        } catch (error) {
+            console.error(error);
+            alert('Something went wrong. Check console.');
+            setIsProcessing(false);
+        }
+    };
+
+    // Helper to Create Order in DB (Abstracted from original logic)
+    const handlePlaceOrder = async (paymentResult) => {
+        setIsProcessing(true);
+        const orderData = {
+            orderItems: cart.map(item => ({
+                name: item.name,
+                qty: item.quantity,
+                image: item.image,
+                price: item.price,
+                product: item.id
+            })),
+            shippingAddress: {
+                address: formData.address,
+                city: formData.city,
+                postalCode: formData.pincode,
+                country: 'India' // Hardcoded for now
+            },
+            paymentMethod: paymentMethod === 'upi' || paymentMethod === 'card' ? 'Online' : 'COD',
+            paymentResult: paymentResult || {}, // Empty for COD or Pending
+            itemsPrice: subtotal,
+            shippingPrice: shipping,
+            taxPrice: 0,
+            totalPrice: total
+        };
+
+        const result = await createOrder(orderData);
+
+        setIsProcessing(false);
+        setShowPaymentModal(false);
+
+        if (result.success) {
+            navigate('/order-success');
+        } else {
+            alert('Order Failed: ' + (result.message || 'Unknown Error'));
+        }
     };
 
     return (
