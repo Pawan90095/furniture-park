@@ -17,24 +17,22 @@ app.use(express.json());
 
 import productRoutes from './routes/productRoutes.js';
 
-// ...
+
 
 import userRoutes from './routes/userRoutes.js';
 
-// ...
+
 
 import orderRoutes from './routes/orderRoutes.js';
 import siteSettingsRoutes from './routes/siteSettingsRoutes.js';
 
-// ...
 
-app.use('/api/products', productRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes);
+
+
 import uploadRoutes from './routes/uploadRoutes.js';
 import path from 'path';
 
-// ...
+
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
@@ -58,13 +56,17 @@ app.get('/', (req, res) => {
 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
-// ...
-
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// Only listen if the file is run directly (not imported)
+import { fileURLToPath } from 'url';
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    app.listen(PORT, () => {
+        console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
+}
+
+export default app;
