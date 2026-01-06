@@ -101,8 +101,8 @@ export default function Checkout() {
                 return;
             }
 
-            // 2. Get Key from Backend Response or Env
-            const finalKey = data.key || import.meta.env.VITE_RAZORPAY_KEY_ID;
+            // 2. Get Key from Backend Response or Env or Hardcoded Fallback
+            const finalKey = data.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_S0YAxnkoNZ8UHg';
 
             if (!finalKey) {
                 alert("Error: Razorpay Key ID is not configured.");
