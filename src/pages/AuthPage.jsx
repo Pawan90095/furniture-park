@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Loader2, Check } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2, Check, User, AlertCircle } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AuthInput from '../components/AuthInput';
 import AuthCheckbox from '../components/AuthCheckbox';
 import SocialButton from '../components/SocialButton';
 import lifestyleImg from '../assets/auth-lifestyle.png';
+import { useStore } from '../store/useStore';
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -36,33 +38,64 @@ const PinterestIcon = () => (
 );
 
 const AuthPage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     // Form States
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newsletter, setNewsletter] = useState(false);
+
+    const { loginUser, registerUser, user } = useStore();
+
+    // Check if user is already logged in
+    useEffect(() => {
+        if (user) {
+            navigate('/account');
+        }
+    }, [user, navigate]);
 
     useEffect(() => {
         // Reset states when switching modes
         setIsSuccess(false);
         setIsLoading(false);
+        setError('');
+        setName('');
         setEmail('');
         setPassword('');
     }, [isLogin]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setError('');
 
-        // Mock API call
-        setTimeout(() => {
+        try {
+            let res;
+            if (isLogin) {
+                res = await loginUser(email, password);
+            } else {
+                res = await registerUser(name, email, password);
+            }
+
+            if (res.success) {
+                setIsSuccess(true);
+                setTimeout(() => {
+                    navigate('/account');
+                }, 2000);
+            } else {
+                setError(res.message || 'Something went wrong. Please try again.');
+            }
+        } catch (err) {
+            setError(err.message || 'An unexpected error occurred.');
+        } finally {
             setIsLoading(false);
-            setIsSuccess(true);
-            // In real app, redirect here after small delay
-        }, 2000);
+        }
     };
 
     return (
@@ -166,8 +199,33 @@ const AuthPage = () => {
                                     </div>
                                 </div>
 
+                                {/* Error Message */}
+                                {error && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mb-4 p-3 bg-red-50 border border-red-100 rounded-lg flex items-center gap-2 text-red-600 text-sm"
+                                    >
+                                        <AlertCircle size={16} />
+                                        <span>{error}</span>
+                                    </motion.div>
+                                )}
+
                                 {/* Form */}
-                                <form onSubmit={handleSubmit} className="space-y-2">
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    {!isLogin && (
+                                        <AuthInput
+                                            id="name"
+                                            type="text"
+                                            label="Full Name"
+                                            placeholder="John Doe"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            icon={User}
+                                            required
+                                        />
+                                    )}
+
                                     <AuthInput
                                         id="email"
                                         type="email"
@@ -191,7 +249,7 @@ const AuthPage = () => {
                                     />
 
                                     {!isLogin && (
-                                        <div className="my-6">
+                                        <div className="mt-2">
                                             <AuthCheckbox
                                                 id="newsletter"
                                                 label="Send me interior design trends and exclusive furniture drops."
@@ -202,8 +260,8 @@ const AuthPage = () => {
                                     )}
 
                                     {isLogin && (
-                                        <div className="flex justify-end mb-6">
-                                            <a href="#" className="text-sm text-auth-primary hover:underline underline-offset-4">Forgot Password?</a>
+                                        <div className="flex justify-end pt-1">
+                                            <a href="/forgot-password" className="text-sm text-auth-primary hover:underline underline-offset-4">Forgot Password?</a>
                                         </div>
                                     )}
 
@@ -211,7 +269,7 @@ const AuthPage = () => {
                                         whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(93, 64, 55, 0.2)" }}
                                         whileTap={{ scale: 0.98 }}
                                         type="submit"
-                                        className="w-full bg-auth-primary text-white py-4 rounded-lg font-medium tracking-wide flex items-center justify-center group relative overflow-hidden"
+                                        className="w-full bg-auth-primary text-white py-4 rounded-lg font-medium tracking-wide flex items-center justify-center group relative overflow-hidden mt-6"
                                         disabled={isLoading}
                                     >
                                         <AnimatePresence mode="wait">

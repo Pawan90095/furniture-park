@@ -105,10 +105,14 @@ export const useStore = create(persist((set, get) => ({
     addProduct: async (productData) => {
         const API_URL = import.meta.env.VITE_API_URL || '';
         try {
+            const { user } = get();
             // Optimistic update or wait for API? Let's wait.
             const res = await fetch(`${API_URL}/api/products`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user?.token}`
+                },
                 body: JSON.stringify(productData),
             });
             const newProduct = await res.json();
@@ -139,7 +143,13 @@ export const useStore = create(persist((set, get) => ({
     deleteProduct: async (id) => {
         const API_URL = import.meta.env.VITE_API_URL || '';
         try {
-            await fetch(`${API_URL}/api/products/${id}`, { method: 'DELETE' });
+            const { user } = get();
+            await fetch(`${API_URL}/api/products/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${user?.token}`
+                }
+            });
             set((state) => ({
                 products: state.products.filter((p) => p._id !== id && p.id !== id),
             }));
@@ -200,7 +210,10 @@ export const useStore = create(persist((set, get) => ({
             const API_URL = import.meta.env.VITE_API_URL || '';
             await fetch(`${API_URL}/api/settings`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user?.token}`
+                },
                 body: JSON.stringify(newSettings)
             });
         } catch (e) { console.error(e) }
@@ -216,9 +229,13 @@ export const useStore = create(persist((set, get) => ({
 
             // Sync API in background
             const API_URL = import.meta.env.VITE_API_URL || '';
+            const { user } = get();
             fetch(`${API_URL}/api/settings`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user?.token}`
+                },
                 body: JSON.stringify(newSettings)
             });
 
