@@ -1,5 +1,9 @@
-// ... (imports remain same)
-import { useStore } from '../store/useStore'; // Added useStore import
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { CreditCard, Banknote, ArrowRight, Truck, Loader2 } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import { useStore } from '../store/useStore';
 
 export default function Checkout() {
     const { cart, clearCart, cartTotal } = useCart();
