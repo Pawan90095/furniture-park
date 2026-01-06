@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Loader2, Check, User, AlertCircle } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
 import AuthInput from '../components/AuthInput';
 import AuthCheckbox from '../components/AuthCheckbox';
 import SocialButton from '../components/SocialButton';
@@ -30,13 +31,6 @@ const GoogleIcon = () => (
     </svg>
 );
 
-// Pinterest Icon Component
-const PinterestIcon = () => (
-    <svg className="w-5 h-5" fill="#E60023" viewBox="0 0 24 24">
-        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.399.165-1.495-.69-2.433-2.864-2.433-4.629 0-3.775 2.748-7.229 7.951-7.229 4.173 0 6.933 2.983 6.933 6.115 0 3.652-2.3 6.59-5.483 6.59-1.071 0-2.074-.562-2.417-1.229l-.655 2.484c-.237.907-.88 2.052-1.312 2.75 1.006.295 2.064.459 3.154.459 6.621 0 11.987-5.365 11.987-11.987C24.033 5.367 18.666 0 12.016 0" />
-    </svg>
-);
-
 const AuthPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -51,7 +45,36 @@ const AuthPage = () => {
     const [password, setPassword] = useState('');
     const [newsletter, setNewsletter] = useState(false);
 
-    const { loginUser, registerUser, user } = useStore();
+    const { loginUser, registerUser, googleAuth, user } = useStore();
+
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            setIsLoading(true);
+            try {
+                // Fetch user info from Google
+                const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+                }).then(res => res.json());
+
+                // Send to backend
+                const res = await googleAuth(userInfo.email, userInfo.name, userInfo.sub);
+
+                if (res.success) {
+                    setIsSuccess(true);
+                    setTimeout(() => {
+                        navigate('/account');
+                    }, 2000);
+                } else {
+                    setError(res.message || 'Google Login failed');
+                }
+            } catch (err) {
+                setError('Failed to Connect with Google');
+            } finally {
+                setIsLoading(false);
+            }
+        },
+        onError: () => setError('Google Login Failed'),
+    });
 
     // Check if user is already logged in
     useEffect(() => {
@@ -186,8 +209,7 @@ const AuthPage = () => {
                             >
                                 {/* Social Login */}
                                 <div className="space-y-4 mb-8">
-                                    <SocialButton platform="Google" icon={<GoogleIcon />} onClick={() => { }} />
-                                    <SocialButton platform="Pinterest" icon={<PinterestIcon />} onClick={() => { }} />
+                                    <SocialButton platform="Google" icon={<GoogleIcon />} onClick={() => handleGoogleLogin()} />
                                 </div>
 
                                 <div className="relative mb-8">
@@ -261,7 +283,7 @@ const AuthPage = () => {
 
                                     {isLogin && (
                                         <div className="flex justify-end pt-1">
-                                            <a href="/forgot-password" className="text-sm text-auth-primary hover:underline underline-offset-4">Forgot Password?</a>
+                                            <Link to="/forgot-password" className="text-sm text-auth-primary hover:underline underline-offset-4">Forgot Password?</Link>
                                         </div>
                                     )}
 
@@ -311,7 +333,10 @@ const AuthPage = () => {
                                     </p>
 
                                     <div className="mt-6">
-                                        <button className="text-sm text-gray-400 hover:text-auth-primary transition-colors">
+                                        <button
+                                            onClick={() => navigate('/')}
+                                            className="text-sm text-gray-400 hover:text-auth-primary transition-colors"
+                                        >
                                             Just browsing? Continue as Guest
                                         </button>
                                     </div>

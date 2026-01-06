@@ -16,13 +16,58 @@ const authUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            role: user.role,
+            isAdmin: user.isAdmin,
             token: generateToken(user._id),
-            savedAddresses: user.savedAddresses
+            savedAddresses: user.savedAddresses,
         });
     } else {
         res.status(401);
         throw new Error('Invalid email or password');
+    }
+});
+
+// @desc    Google Auth (Login or Register)
+// @route   POST /api/users/google
+// @access  Public
+const googleLogin = asyncHandler(async (req, res) => {
+    const { email, name, googleId } = req.body;
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+        // User exists, log them in
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id),
+            savedAddresses: user.savedAddresses,
+        });
+    } else {
+        // Create new user
+        // Generate random password as they used Google
+        const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+
+        user = await User.create({
+            name,
+            email,
+            password: randomPassword,
+        });
+
+        if (user) {
+            res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                token: generateToken(user._id),
+                savedAddresses: user.savedAddresses,
+            });
+        } else {
+            res.status(400);
+            throw new Error('Invalid user data');
+        }
     }
 });
 

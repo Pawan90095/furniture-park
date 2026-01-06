@@ -99,6 +99,26 @@ export const useStore = create(persist((set, get) => ({
         }
     },
 
+    googleAuth: async (email, name, googleId) => {
+        const API_URL = import.meta.env.VITE_API_URL || '';
+        try {
+            const res = await fetch(`${API_URL}/api/users/google`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, googleId }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                set({ user: data });
+                return { success: true };
+            } else {
+                return { success: false, message: data.message };
+            }
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    },
+
     logoutUser: () => set({ user: null }),
 
     // Product Management (Admin)
