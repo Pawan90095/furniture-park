@@ -45,8 +45,12 @@ router.post('/create-order', asyncHandler(async (req, res) => {
         });
     } catch (error) {
         console.error('Razorpay API Error:', error);
-        res.status(500);
-        throw new Error(error.message);
+        res.status(500).json({
+            message: error.message,
+            stack: process.env.NODE_ENV === 'production' ? null : error.stack,
+            detail: error
+        });
+        // We handle the response manually above, so we don't need to throw
     }
 }));
 
