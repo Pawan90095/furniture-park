@@ -35,7 +35,10 @@ router.post('/create-order', asyncHandler(async (req, res) => {
 
     try {
         const order = await razorpay.orders.create(options);
-        res.json(order);
+        res.json({
+            ...order,
+            key: process.env.RAZORPAY_KEY_ID
+        });
     } catch (error) {
         console.error('Razorpay API Error:', error);
         res.status(500);

@@ -67,13 +67,6 @@ export default function Checkout() {
             return;
         }
 
-        // 0. Check for Frontend Key
-        const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
-        if (!razorpayKey) {
-            alert("Error: VITE_RAZORPAY_KEY_ID is missing in frontend environment variables.");
-            return;
-        }
-
         setIsProcessing(true);
         const res = await loadRazorpay();
 
@@ -108,9 +101,18 @@ export default function Checkout() {
                 return;
             }
 
-            // 2. Open Razorpay Options
+            // 2. Get Key from Backend Response or Env
+            const finalKey = data.key || import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+            if (!finalKey) {
+                alert("Error: Razorpay Key ID is not configured.");
+                setIsProcessing(false);
+                return;
+            }
+
+            // 3. Open Razorpay Options
             const options = {
-                key: razorpayKey,
+                key: finalKey,
                 amount: data.amount,
                 currency: data.currency,
                 name: "Furniture Park",
