@@ -19,6 +19,14 @@ const razorpay = new Razorpay({
 router.post('/create-order', asyncHandler(async (req, res) => {
     const { amount } = req.body;
 
+    console.log('Razorpay Create Order Request:', { amount, key: !!process.env.RAZORPAY_KEY_ID });
+
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        console.error('Razorpay keys missing');
+        res.status(500);
+        throw new Error('Razorpay configuration missing on server');
+    }
+
     const options = {
         amount: Math.round(amount * 100), // Amount in smallest currency unit (paise)
         currency: "INR",
@@ -29,6 +37,7 @@ router.post('/create-order', asyncHandler(async (req, res) => {
         const order = await razorpay.orders.create(options);
         res.json(order);
     } catch (error) {
+        console.error('Razorpay API Error:', error);
         res.status(500);
         throw new Error(error.message);
     }

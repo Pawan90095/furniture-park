@@ -63,6 +63,13 @@ export default function Checkout() {
             return;
         }
 
+        // 0. Check for Frontend Key
+        const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+        if (!razorpayKey) {
+            alert("Error: VITE_RAZORPAY_KEY_ID is missing in frontend environment variables.");
+            return;
+        }
+
         setIsProcessing(true);
         const res = await loadRazorpay();
 
@@ -74,7 +81,11 @@ export default function Checkout() {
 
         try {
             // 1. Create Order on Backend
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const API_URL = import.meta.env.VITE_API_URL || ''; // Use relative path for Vercel/proxies usually, or env.
+            // Note: On Vercel, if VITE_API_URL is not set, it might default to '' which is fine for same-domain.
+
+            console.log("Creating order at:", `${API_URL}/api/payment/create-order`);
+
             const result = await fetch(`${API_URL}/api/payment/create-order`, {
                 method: 'POST',
                 headers: {
@@ -87,19 +98,19 @@ export default function Checkout() {
             const data = await result.json();
 
             if (!result.ok) {
-                alert(data.message || 'Server error in creating order');
+                console.error("Order Creation Failed:", data);
+                alert(`Order Creation Failed: ${data.message || result.statusText}`);
                 setIsProcessing(false);
                 return;
             }
 
             // 2. Open Razorpay Options
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+                key: razorpayKey,
                 amount: data.amount,
                 currency: data.currency,
                 name: "Furniture Park",
                 description: "Luxury Furniture Transaction",
-                // image: "https://your-logo-url.com/logo.png",
                 order_id: data.id,
                 handler: async function (response) {
                     // 3. Verify Payment
@@ -131,7 +142,8 @@ export default function Checkout() {
                             alert(verifyData.message || 'Payment Verification Failed');
                         }
                     } catch (error) {
-                        alert('Internal Server Error during Verification');
+                        console.error(error);
+                        alert('Internal Server Error during Verification: ' + error.message);
                     }
                 },
                 prefill: {
@@ -143,20 +155,17 @@ export default function Checkout() {
                     address: formData.address,
                 },
                 theme: {
-                    color: "#0F172A", // Primary Color
+                    color: "#0F172A",
                 },
             };
 
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
             setIsProcessing(false);
-            // Note: processing false here because modal is open. 
-            // Ideally we want to keep it true but then if user cancels, we need to handle that.
-            // Razorpay has a modal.ondismiss which we can use.
 
         } catch (error) {
-            console.error(error);
-            alert('Something went wrong. Check console.');
+            console.error("Checkout Error:", error);
+            alert(`Something went wrong: ${error.message} \n(Check Console for details)`);
             setIsProcessing(false);
         }
     };
