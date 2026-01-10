@@ -52,11 +52,12 @@ router.post('/create-order', asyncHandler(async (req, res) => {
         console.error('Razorpay API Error:', error);
 
         // Extract useful message from various Razorpay error formats
-        const errorMessage = error.error?.description || error.description || error.message || 'Unknown Razorpay Error';
+        let errorMessage = error.error?.description || error.description || error.message;
+        if (!errorMessage) errorMessage = "Unknown Razorpay Error (Empty Message)";
 
         res.status(500).json({
             message: errorMessage,
-            stack: process.env.NODE_ENV === 'production' ? null : error.stack,
+            serverVersion: "v2-debug-fix",
             detail: error
         });
     }

@@ -96,7 +96,8 @@ export default function Checkout() {
 
             if (!result.ok) {
                 console.error("Order Creation Failed:", data);
-                alert(`Order Creation Failed: ${data.message || result.statusText}`);
+                const version = data.serverVersion ? `(Server: ${data.serverVersion})` : '(Old Server Code)';
+                alert(`Order Creation Failed: ${data.message || result.statusText}\n${version}`);
                 setIsProcessing(false);
                 return;
             }
