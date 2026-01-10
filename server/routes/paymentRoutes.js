@@ -19,6 +19,11 @@ const razorpay = new Razorpay({
 router.post('/create-order', asyncHandler(async (req, res) => {
     const { amount } = req.body;
 
+    // Validate amount
+    if (!amount || isNaN(amount) || amount <= 0) {
+        return res.status(400).json({ message: `Invalid amount: ${amount}` });
+    }
+
     console.log('Razorpay Create Order Request:', { amount, key: !!process.env.RAZORPAY_KEY_ID });
 
     // Fallback keys used if env missing
@@ -27,8 +32,8 @@ router.post('/create-order', asyncHandler(async (req, res) => {
 
     if (!keyId || !keySecret) {
         console.error('Razorpay keys missing');
-        res.status(500);
-        throw new Error('Razorpay configuration missing on server');
+        res.status(500).json({ message: 'Razorpay configuration missing on server' });
+        return;
     }
 
     const options = {
@@ -41,16 +46,19 @@ router.post('/create-order', asyncHandler(async (req, res) => {
         const order = await razorpay.orders.create(options);
         res.json({
             ...order,
-            key: process.env.RAZORPAY_KEY_ID || 'rzp_test_S0YAxnkoNZ8UHg'
+            key: keyId
         });
     } catch (error) {
         console.error('Razorpay API Error:', error);
+
+        // Extract useful message from various Razorpay error formats
+        const errorMessage = error.error?.description || error.description || error.message || 'Unknown Razorpay Error';
+
         res.status(500).json({
-            message: error.message,
+            message: errorMessage,
             stack: process.env.NODE_ENV === 'production' ? null : error.stack,
             detail: error
         });
-        // We handle the response manually above, so we don't need to throw
     }
 }));
 
