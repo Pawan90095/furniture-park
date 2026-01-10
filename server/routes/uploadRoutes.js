@@ -6,13 +6,20 @@ import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
 
-const storage = new CloudinaryStorage({
-    cloudinary,
-    params: {
-        folder: 'furniture-park', // The name of the folder in Cloudinary
-        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    },
-});
+let storage;
+try {
+    storage = new CloudinaryStorage({
+        cloudinary,
+        params: {
+            folder: 'furniture-park',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+        },
+    });
+} catch (error) {
+    console.error('Cloudinary Storage Init Failed:', error);
+    // Fallback to memory storage if Cloudinary fails (prevents app crash)
+    storage = multer.memoryStorage();
+}
 
 const upload = multer({ storage });
 
