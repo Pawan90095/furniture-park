@@ -81,10 +81,8 @@ const registerUser = asyncHandler(async (req, res) => {
         const { name, email, password } = req.body;
         console.log("Register Request:", { name, email });
 
-        // Check DB Status
-        if (mongoose.connection.readyState !== 1) {
-            throw new Error("Database not connected (ReadyState: " + mongoose.connection.readyState + ")");
-        }
+        // Mongoose automatically queues operations until connection is ready
+        // No need to check ReadyState manually
 
         const userExists = await User.findOne({ email });
 
