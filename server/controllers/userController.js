@@ -3,6 +3,7 @@ import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 import sendEmail from '../utils/sendEmail.js';
 import mongoose from 'mongoose';
+import crypto from 'crypto';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -195,7 +196,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
 // @desc    Reset Password
 // @route   PUT /api/users/resetpassword/:resetToken
 // @access  Public
-import crypto from 'crypto';
 const resetPassword = asyncHandler(async (req, res) => {
     // Get hashed token
     const resetPasswordToken = crypto
