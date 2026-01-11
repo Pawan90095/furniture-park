@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 import sendEmail from '../utils/sendEmail.js';
+import mongoose from 'mongoose';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -75,33 +76,52 @@ const googleLogin = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body;
+    try {
+        const { name, email, password } = req.body;
+        console.log("Register Request:", { name, email });
 
-    const userExists = await User.findOne({ email });
+        // Check DB Status
+        if (mongoose.connection.readyState !== 1) {
+            throw new Error("Database not connected (ReadyState: " + mongoose.connection.readyState + ")");
+        }
 
-    if (userExists) {
-        res.status(400);
-        throw new Error('User already exists');
-    }
+        const userExists = await User.findOne({ email });
 
-    const user = await User.create({
-        name,
-        email,
-        password,
-    });
+        if (userExists) {
+            res.status(400);
+            throw new Error('User already exists');
+        }
 
-    if (user) {
-        res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            token: generateToken(user._id),
-            savedAddresses: user.savedAddresses
+        console.log("Creating user...");
+        const user = await User.create({
+            name,
+            email,
+            password,
         });
-    } else {
-        res.status(400);
-        throw new Error('Invalid user data');
+
+        console.log("User created:", user._id);
+
+        if (user) {
+            res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                token: generateToken(user._id),
+                savedAddresses: user.savedAddresses
+            });
+        } else {
+            res.status(400);
+            throw new Error('Invalid user data');
+        }
+    } catch (error) {
+        console.error("Register Error CRASH:", error);
+        // Force send JSON even if it crashed
+        res.status(500).json({
+            message: "Registration Failed: " + error.message,
+            stack: error.stack,
+            type: "CatchBlock"
+        });
     }
 });
 
