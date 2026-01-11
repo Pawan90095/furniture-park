@@ -1,58 +1,294 @@
-@import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Work+Sans:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+/* Modern Furniture E-commerce Design System */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+
+    /* CSS Variables - Design Tokens */
+    :root {
+        /* Colors - Warm Neutral Palette */
+        --color-primary: #F5F1E8;
+        /* Warm Cream */
+        --color-secondary: #2C2C2C;
+        /* Deep Charcoal */
+        --color-accent: #D4816E;
+        /* Terracotta */
+        --color-success: #7A9B8E;
+        /* Sage Green */
+        --color-background: #FEFCF9;
+        /* Off White */
+        --color-surface: #FFFFFF;
+        /* Pure White */
+
+        /* Typography */
+        --font-display: 'Playfair Display', serif;
+        --font-body: 'Inter', sans-serif;
+
+        /* Spacing Scale (8px base) */
+        --space-xs: 0.5rem;
+        /* 8px */
+        --space-sm: 1rem;
+        /* 16px */
+        --space-md: 1.5rem;
+        /* 24px */
+        --space-lg: 2rem;
+        /* 32px */
+        --space-xl: 3rem;
+        /* 48px */
+        --space-2xl: 4rem;
+        /* 64px */
+        --space-3xl: 6rem;
+        /* 96px */
+
+        /* Border Radius */
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --radius-full: 9999px;
+
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+        /* Transitions */
+        --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Base Styles */
     html {
         scroll-behavior: smooth;
+        font-size: 16px;
     }
 
     body {
-        @apply bg-background text-gray-600 font-sans antialiased;
+        font-family: var(--font-body);
+        background-color: var(--color-background);
+        color: var(--color-secondary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Editorial Heading System */
+    /* Typography System */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        line-height: 1.2;
+        color: var(--color-secondary);
+        margin: 0;
+    }
+
     h1 {
-        @apply font-display text-stone-900 font-normal leading-tight;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        letter-spacing: -0.02em;
     }
 
     h2 {
-        @apply font-display text-stone-900 font-normal tracking-tight;
+        font-size: clamp(2rem, 4vw, 3rem);
+        letter-spacing: -0.01em;
     }
 
     h3 {
-        @apply font-display text-stone-900 font-normal;
+        font-size: clamp(1.5rem, 3vw, 2rem);
     }
 
-    /* Sub-headings (Overlines) */
-    .overline {
-        @apply uppercase text-xs tracking-[0.2em] font-semibold text-stone-600;
+    h4 {
+        font-size: 1.25rem;
     }
 
-    /* Button Text */
-    .btn-text {
-        @apply uppercase text-xs tracking-widest font-semibold;
+    p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #4A4A4A;
+    }
+
+    a {
+        color: var(--color-secondary);
+        text-decoration: none;
+        transition: color var(--transition-base);
+    }
+
+    a:hover {
+        color: var(--color-accent);
+    }
+
+    /* Utility Classes */
+    .text-display {
+        font-family: var(--font-display);
+    }
+
+    .text-body {
+        font-family: var(--font-body);
+    }
+
+    .text-overline {
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #888;
+    }
+
+    .text-accent {
+        color: var(--color-accent);
     }
 }
 
-/* Custom Utilities for Glassmorphism */
-.glass {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+@layer components {
+
+    /* Button Components */
+    .btn {
+        @apply inline-flex items-center justify-center px-8 py-3 font-medium;
+        font-family: var(--font-body);
+        border-radius: var(--radius-md);
+        transition: all var(--transition-base);
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.875rem;
+    }
+
+    .btn-primary {
+        @apply bg-[#2C2C2C] text-white;
+    }
+
+    .btn-primary:hover {
+        @apply bg-[#1a1a1a] transform scale-105;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+        @apply border-2 border-[#2C2C2C] text-[#2C2C2C] bg-transparent;
+    }
+
+    .btn-secondary:hover {
+        @apply bg-[#2C2C2C] text-white transform scale-105;
+    }
+
+    .btn-accent {
+        @apply bg-[#D4816E] text-white;
+    }
+
+    .btn-accent:hover {
+        @apply bg-[#c26d5c] transform scale-105;
+    }
+
+    /* Card Component */
+    .card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: var(--space-lg);
+        transition: all var(--transition-base);
+    }
+
+    .card:hover {
+        box-shadow: var(--shadow-xl);
+        transform: translateY(-4px);
+    }
+
+    /* Container */
+    .container-custom {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
+    }
+
+    @media (min-width: 768px) {
+        .container-custom {
+            padding-left: var(--space-xl);
+            padding-right: var(--space-xl);
+        }
+    }
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
+@layer utilities {
+
+    /* Animation Utilities */
+    .animate-fade-in {
+        animation: fadeIn var(--transition-slow) ease-in;
+    }
+
+    .animate-slide-up {
+        animation: slideUp var(--transition-slow) ease-out;
+    }
+
+    .hover-lift {
+        transition: transform var(--transition-base);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-8px);
+    }
+
+    /* Glass Effect */
+    .glass {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    /* Scrollbar Hide */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Gradient Overlay */
+    .gradient-overlay {
+        position: relative;
+    }
+
+    .gradient-overlay::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        pointer-events: none;
+    }
 }
 
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes marquee {
@@ -67,4 +303,16 @@
 
 .animate-marquee {
     animation: marquee 20s linear infinite;
+}
+
+/* Focus Visible (Accessibility) */
+*:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Selection Color */
+::selection {
+    background-color: var(--color-accent);
+    color: white;
 }
