@@ -4,8 +4,8 @@ import { Truck, Shield, CreditCard, Headphones } from 'lucide-react';
 const trustItems = [
     {
         icon: Truck,
-        title: "Fast Delivery",
-        description: "Free shipping on orders over ₹10,000"
+        title: "Free Shipping",
+        description: "On orders over ₹10,000"
     },
     {
         icon: Shield,
@@ -26,19 +26,23 @@ const trustItems = [
 
 export default function TrustStrip() {
     return (
-        <section className="bg-gray-50 py-8 border-y border-gray-200">
-            <div className="max-w-[1440px] mx-auto px-4 lg:px-12">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <section className="bg-[#F5F1E8] py-12 border-y border-[#2C2C2C]/10">
+            <div className="container-custom">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
                     {trustItems.map((item, index) => {
                         const Icon = item.icon;
                         return (
-                            <div key={index} className="flex items-center space-x-3">
-                                <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                                    <Icon className="text-primary" size={20} />
+                            <div key={index} className="flex flex-col items-center text-center space-y-3">
+                                <div className="w-14 h-14 bg-[#D4816E] rounded-full flex items-center justify-center">
+                                    <Icon className="text-white" size={24} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-sm text-gray-900">{item.title}</h3>
-                                    <p className="text-xs text-gray-600">{item.description}</p>
+                                    <h3 className="font-semibold text-sm text-[#2C2C2C] mb-1">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-xs text-[#4A4A4A]">
+                                        {item.description}
+                                    </p>
                                 </div>
                             </div>
                         );
