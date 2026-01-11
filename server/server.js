@@ -7,8 +7,14 @@ import connectDB from './config/db.js';
 // Load env vars
 dotenv.config();
 
-// Connect to Database
-connectDB();
+// Connect to Database (async, don't block serverless function)
+(async () => {
+    try {
+        await connectDB();
+    } catch (error) {
+        console.error('DB Connection Failed (non-fatal):', error.message);
+    }
+})();
 
 const app = express();
 
