@@ -9,8 +9,8 @@ dotenv.config();
 const router = express.Router();
 
 const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_S2VrB9WBQb7j5L',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || '9W71ji1bq1Erc8y2hiuXhWMJ',
+    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_S0YAxnkoNZ8UHg',
+    key_secret: process.env.RAZORPAY_KEY_SECRET || '5uo18JIe50YbRE8YTLMmkFRk',
 });
 
 // @desc    Create Razorpay Order
@@ -27,8 +27,8 @@ router.post('/create-order', asyncHandler(async (req, res) => {
     console.log('Razorpay Create Order Request:', { amount, key: !!process.env.RAZORPAY_KEY_ID });
 
     // Fallback keys used if env missing
-    const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_S2VrB9WBQb7j5L';
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || '9W71ji1bq1Erc8y2hiuXhWMJ';
+    const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_S0YAxnkoNZ8UHg';
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || '5uo18JIe50YbRE8YTLMmkFRk';
 
     if (!keyId || !keySecret) {
         console.error('Razorpay keys missing');
