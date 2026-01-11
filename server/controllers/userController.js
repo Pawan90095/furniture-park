@@ -226,4 +226,4 @@ const resetPassword = asyncHandler(async (req, res) => {
     });
 });
 
-export { authUser, registerUser, getUserProfile, forgotPassword, resetPassword };
+export { authUser, registerUser, getUserProfile, forgotPassword, resetPassword, googleLogin };
