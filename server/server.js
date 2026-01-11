@@ -51,7 +51,13 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Basic Route
 app.get('/', (req, res) => {
-    res.send('API is running...');
+    const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
+    res.json({
+        message: 'API is running...',
+        dbStatus,
+        env: process.env.NODE_ENV,
+        ver: 'v3-db-check'
+    });
 });
 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
