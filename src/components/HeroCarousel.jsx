@@ -7,27 +7,27 @@ const slides = [
     {
         id: 1,
         image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-        title: "Monsoon Sale",
-        subtitle: "Flat 40% Off",
-        description: "Transform your space with our exclusive monsoon collection",
-        cta: "Shop Now",
+        overline: "Spring Collection 2026",
+        title: "Elevate Your Living Space",
+        description: "Discover curated furniture pieces that blend timeless elegance with modern comfort",
+        cta: "Explore Collection",
         link: "/shop"
     },
     {
         id: 2,
         image: "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
+        overline: "Bedroom Essentials",
         title: "Sleep in Luxury",
-        subtitle: "Premium Mattresses",
-        description: "Experience comfort like never before with our handcrafted mattresses",
-        cta: "Explore Beds",
+        description: "Transform your bedroom into a sanctuary with our premium collection",
+        cta: "Shop Bedroom",
         link: "/shop?category=Bedroom"
     },
     {
         id: 3,
         image: "https://images.unsplash.com/photo-1600494603989-9650cf6ddd3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80",
-        title: "Work from Home Essentials",
-        subtitle: "Productivity Meets Style",
-        description: "Create your perfect home office with ergonomic furniture",
+        overline: "Home Office",
+        title: "Work Meets Design",
+        description: "Create your perfect workspace with ergonomic and stylish furniture",
         cta: "Shop Office",
         link: "/shop?q=office"
     }
@@ -39,7 +39,7 @@ export default function HeroCarousel() {
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 5000);
+        }, 6000);
         return () => clearInterval(timer);
     }, []);
 
@@ -56,47 +56,57 @@ export default function HeroCarousel() {
     };
 
     return (
-        <section className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+        <section className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden bg-[#2C2C2C]">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentSlide}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.7 }}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 1, ease: "easeInOut" }}
                     className="absolute inset-0"
                 >
-                    {/* Background Image */}
-                    <img
+                    {/* Background Image with Ken Burns Effect */}
+                    <motion.img
+                        initial={{ scale: 1 }}
+                        animate={{ scale: 1.08 }}
+                        transition={{ duration: 6, ease: "linear" }}
                         src={slides[currentSlide].image}
                         alt={slides[currentSlide].title}
                         className="w-full h-full object-cover"
                     />
 
-                    {/* Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+                    {/* Elegant Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
 
                     {/* Content */}
                     <div className="absolute inset-0 flex items-center">
-                        <div className="max-w-[1440px] mx-auto px-4 lg:px-12 w-full">
+                        <div className="container-custom w-full">
                             <motion.div
-                                initial={{ x: -50, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0.3, duration: 0.6 }}
-                                className="max-w-xl"
+                                initial={{ y: 60, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+                                className="max-w-2xl"
                             >
-                                <h1 className="text-5xl md:text-7xl font-display font-normal text-white mb-4 leading-tight">
+                                {/* Overline */}
+                                <p className="text-overline text-[#D4816E] mb-4 animate-fade-in">
+                                    {slides[currentSlide].overline}
+                                </p>
+
+                                {/* Title */}
+                                <h1 className="text-display font-display text-white mb-6 leading-[1.1]">
                                     {slides[currentSlide].title}
                                 </h1>
-                                <p className="text-xl md:text-2xl text-secondary font-semibold mb-4 uppercase tracking-wider">
-                                    {slides[currentSlide].subtitle}
-                                </p>
-                                <p className="text-base text-gray-200 mb-8 max-w-md font-light">
+
+                                {/* Description */}
+                                <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-xl font-light leading-relaxed">
                                     {slides[currentSlide].description}
                                 </p>
+
+                                {/* CTA Button */}
                                 <Link
                                     to={slides[currentSlide].link}
-                                    className="inline-block bg-white text-stone-900 px-8 py-3 rounded-full font-semibold text-xs uppercase tracking-widest hover:bg-stone-900 hover:text-white transition-all"
+                                    className="btn btn-primary"
                                 >
                                     {slides[currentSlide].cta}
                                 </Link>
@@ -106,31 +116,31 @@ export default function HeroCarousel() {
                 </motion.div>
             </AnimatePresence>
 
-            {/* Navigation Arrows */}
+            {/* Navigation Arrows - Minimalist */}
             <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all z-10"
+                className="absolute left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-all z-10"
                 aria-label="Previous slide"
             >
                 <ChevronLeft className="text-white" size={24} />
             </button>
             <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all z-10"
+                className="absolute right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center hover:bg-white/20 transition-all z-10"
                 aria-label="Next slide"
             >
                 <ChevronRight className="text-white" size={24} />
             </button>
 
-            {/* Dots Indicator */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+            {/* Dots Indicator - Elegant */}
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-3 z-10">
                 {slides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-2 h-2 rounded-full transition-all ${index === currentSlide
-                            ? 'bg-white w-8'
-                            : 'bg-white/50 hover:bg-white/75'
+                        className={`h-1 rounded-full transition-all duration-500 ${index === currentSlide
+                            ? 'bg-white w-12'
+                            : 'bg-white/40 w-8 hover:bg-white/60'
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
                     />
