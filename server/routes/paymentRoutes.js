@@ -8,6 +8,21 @@ dotenv.config();
 
 const router = express.Router();
 
+// @desc    Check Razorpay Configuration Status
+// @route   GET /api/payment/status
+// @access  Public
+router.get('/status', (req, res) => {
+    res.json({
+        configured: !!razorpay,
+        keyIdExists: !!RAZORPAY_KEY_ID,
+        keySecretExists: !!RAZORPAY_KEY_SECRET,
+        keyIdPrefix: RAZORPAY_KEY_ID?.substring(0, 12) + '***',
+        isLive: RAZORPAY_KEY_ID?.startsWith('rzp_live'),
+        source: process.env.RAZORPAY_KEY_ID ? 'environment_variable' : 'fallback',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Initialize Razorpay credentials
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_live_S1SDwHGOyh7OzV';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'jjqDENOmOvx2d5zd1jsl1KHG';
