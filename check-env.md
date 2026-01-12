@@ -16,8 +16,8 @@ Add or update the following variables with your **NEW** credentials:
 
 | Variable Name | Value | Environment |
 |--------------|-------|-------------|
-| `RAZORPAY_KEY_ID` | `rzp_test_S2VrB9WBQb7j5L` | Production, Preview, Development |
-| `RAZORPAY_KEY_SECRET` | `9W71jj1bq1Erc8y2hiuxhWMJ` | Production, Preview, Development |
+| `RAZORPAY_KEY_ID` | `rzp_test_S2wU4RHwHSxACM` | Production, Preview, Development |
+| `RAZORPAY_KEY_SECRET` | `BO34IGKU1M86vZ2YzvBYX69y` | Production, Preview, Development |
 
 **Important Notes:**
 - Make sure to select **ALL environments** (Production, Preview, Development) when adding each variable
@@ -50,8 +50,8 @@ After redeployment:
 If you want to test locally, create a `.env` file in the `server` folder:
 
 ```env
-RAZORPAY_KEY_ID=rzp_test_S2VrB9WBQb7j5L
-RAZORPAY_KEY_SECRET=9W71jj1bq1Erc8y2hiuxhWMJ
+RAZORPAY_KEY_ID=rzp_test_S2wU4RHwHSxACM
+RAZORPAY_KEY_SECRET=BO34IGKU1M86vZ2YzvBYX69y
 ```
 
 **Note:** The code now has these as fallback values, so it should work even without the .env file.

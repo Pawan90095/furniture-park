@@ -26,8 +26,8 @@ router.get('/status', (req, res) => {
 
 // Initialize Razorpay credentials
 // FORCE NEW CREDENTIALS - Ignoring old environment variables until Vercel is updated
-const RAZORPAY_KEY_ID = 'rzp_test_S2VrB9WBQb7j5L';  // New credentials
-const RAZORPAY_KEY_SECRET = '9W71jj1bq1Erc8y2hiuxhWMJ';  // New credentials
+const RAZORPAY_KEY_ID = 'rzp_test_S2wU4RHwHSxACM';  // New credentials
+const RAZORPAY_KEY_SECRET = 'BO34IGKU1M86vZ2YzvBYX69y';  // New credentials
 
 console.log('⚠️ FORCED CREDENTIALS MODE - Update Vercel env vars and remove this override!');
 

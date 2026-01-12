@@ -24,7 +24,7 @@ Click this link: [https://vercel.com/dashboard](https://vercel.com/dashboard)
 Find the existing `RAZORPAY_KEY_ID` variable:
 - Click the **⋯** (three dots) next to it
 - Click **Edit**
-- Replace the value with: `rzp_test_S2VrB9WBQb7j5L`
+- Replace the value with: `rzp_test_S2wU4RHwHSxACM`
 - Make sure all environments are selected (Production, Preview, Development)
 - Click **Save**
 
@@ -32,7 +32,7 @@ Find the existing `RAZORPAY_KEY_ID` variable:
 Find the existing `RAZORPAY_KEY_SECRET` variable:
 - Click the **⋯** (three dots) next to it
 - Click **Edit**
-- Replace the value with: `9W71jj1bq1Erc8y2hiuxhWMJ`
+- Replace the value with: `BO34IGKU1M86vZ2YzvBYX69y`
 - Make sure all environments are selected (Production, Preview, Development)
 - Click **Save**
 
