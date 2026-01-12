@@ -12,12 +12,12 @@ Your payment authentication is failing because the Razorpay credentials are not 
 
 ### Step 2: Add/Update These Environment Variables
 
-Add or update the following variables:
+Add or update the following variables with your **NEW** credentials:
 
 | Variable Name | Value | Environment |
 |--------------|-------|-------------|
-| `RAZORPAY_KEY_ID` | `rzp_live_S1SDwHGOyh7OzV` | Production, Preview, Development |
-| `RAZORPAY_KEY_SECRET` | `jjqDENOmOvx2d5zd1jsl1KHG` | Production, Preview, Development |
+| `RAZORPAY_KEY_ID` | `rzp_test_S2VrB9WBQb7j5L` | Production, Preview, Development |
+| `RAZORPAY_KEY_SECRET` | `9W71jj1bq1Erc8y2hiuxhWMJ` | Production, Preview, Development |
 
 **Important Notes:**
 - Make sure to select **ALL environments** (Production, Preview, Development) when adding each variable
@@ -41,7 +41,7 @@ After redeployment:
 2. Try to make a payment
 3. Check the Vercel logs (Runtime Logs) to see the new debug output:
    - Look for: `🔐 Razorpay Configuration:`
-   - Should show: `isLive: true`, `source: 'env'`
+   - Should show: `isLive: false` (test mode), `source: 'env'` or `source: 'fallback'`
 
 ---
 
@@ -50,8 +50,8 @@ After redeployment:
 If you want to test locally, create a `.env` file in the `server` folder:
 
 ```env
-RAZORPAY_KEY_ID=rzp_live_S1SDwHGOyh7OzV
-RAZORPAY_KEY_SECRET=jjqDENOmOvx2d5zd1jsl1KHG
+RAZORPAY_KEY_ID=rzp_test_S2VrB9WBQb7j5L
+RAZORPAY_KEY_SECRET=9W71jj1bq1Erc8y2hiuxhWMJ
 ```
 
 **Note:** The code now has these as fallback values, so it should work even without the .env file.

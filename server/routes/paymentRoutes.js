@@ -24,8 +24,8 @@ router.get('/status', (req, res) => {
 });
 
 // Initialize Razorpay credentials
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_live_S1SDwHGOyh7OzV';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'jjqDENOmOvx2d5zd1jsl1KHG';
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_S2VrB9WBQb7j5L';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '9W71jj1bq1Erc8y2hiuxhWMJ';
 
 // Log credential status (without exposing full keys)
 console.log('🔐 Razorpay Configuration:', {
