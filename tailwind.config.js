@@ -22,7 +22,7 @@ export default {
                 'auth-success': "#388E3C",
             },
             fontFamily: {
-                display: ['Tenor Sans', 'sans-serif'],
+                display: ['Playfair Display', 'serif'],
                 body: ['Work Sans', 'sans-serif'],
                 sans: ['Work Sans', 'sans-serif'],
                 'auth-heading': ['Playfair Display', 'serif'],

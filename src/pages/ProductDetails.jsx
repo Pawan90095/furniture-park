@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-import { ArrowLeft, Check, ShoppingBag, ShieldCheck, Truck, Clock, Star, Plus, Minus, X, User, Flame, Eye, CreditCard, BadgeCheck } from 'lucide-react';
+import { ArrowLeft, Check, ShoppingBag, ShieldCheck, Truck, Clock, Star, Plus, Minus, X, User, CreditCard, BadgeCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ImageZoom from '../components/ImageZoom';
 
@@ -20,16 +20,9 @@ export default function ProductDetails() {
 
     const product = products.find((p) => (p._id || p.id) == id); // Handle Mongo _id or legacy id
 
-    // CRO State
-    const [timeLeft, setTimeLeft] = useState(14); // For stock
-    const [viewers, setViewers] = useState(12);
     const [showSticky, setShowSticky] = useState(false);
 
     useEffect(() => {
-        // Randomize Stock & Viewers
-        setTimeLeft(Math.floor(Math.random() * 5) + 2); // 2-6 items
-        setViewers(Math.floor(Math.random() * 15) + 5); // 5-20 viewers
-
         // Track recently viewed
         if (product) {
             addToRecentlyViewed(product.id);
@@ -92,27 +85,9 @@ export default function ProductDetails() {
                     >
                         <h5 className="text-xs font-bold text-secondary mb-2 uppercase tracking-widest">{product.category}</h5>
                         <h1 className="text-5xl lg:text-7xl font-serif font-bold italic text-primary mb-4 leading-tight">{product.name}</h1>
-                        {/* Scarcity & Urgency */}
-                        <div className="flex flex-col gap-2 mb-4">
-                            <div className="flex items-center space-x-2 text-red-500 font-bold animate-pulse text-sm">
-                                <Flame size={16} />
-                                <span>Hurry! Only {timeLeft} units left in stock.</span>
-                            </div>
-                            <div className="flex items-center space-x-2 text-gray-500 text-sm">
-                                <Eye size={16} />
-                                <span>{viewers} people are looking at this right now.</span>
-                            </div>
-                        </div>
-
                         {/* Price Display */}
                         <div className="flex items-end gap-3 mb-8">
-                            <div className="space-y-1">
-                                <p className="text-sm text-gray-400 font-medium line-through font-sans">₹{(product.price * 1.3).toFixed(0)}</p>
-                                <p className="text-4xl lg:text-5xl font-sans font-bold text-amber-700">₹{product.price.toLocaleString()}</p>
-                            </div>
-                            <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold mb-2">
-                                Save ₹{((product.price * 1.3) - product.price).toFixed(0)} (30% OFF)
-                            </span>
+                            <p className="text-4xl lg:text-5xl font-sans font-bold text-primary">₹{product.price.toLocaleString()}</p>
                         </div>
 
                         <div className="prose prose-sm text-gray-500 mb-8 max-w-none leading-relaxed">
