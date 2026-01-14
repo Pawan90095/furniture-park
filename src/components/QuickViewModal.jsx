@@ -10,7 +10,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
     const { addToCart } = useCart();
     const { wishlist, toggleWishlist } = useStore();
     const isWishlisted = wishlist.includes(product?.id);
-    const toast = useToast();
+    const { toast } = useToast();
 
     // Close on ESC key
     useEffect(() => {

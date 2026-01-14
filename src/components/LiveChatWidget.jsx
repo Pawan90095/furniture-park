@@ -6,7 +6,7 @@ import { useToast } from '../context/ToastContext';
 export default function LiveChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const toast = useToast();
+    const { toast } = useToast();
 
     const handleSubmit = (e) => {
         e.preventDefault();

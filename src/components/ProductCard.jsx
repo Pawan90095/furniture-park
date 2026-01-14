@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
     const { wishlist, toggleWishlist, compareList, addToCompare } = useStore();
     const isWishlisted = wishlist.includes(product.id);
     const isInCompare = compareList.includes(product.id);
-    const toast = useToast();
+    const { toast } = useToast();
     const [showQuickView, setShowQuickView] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
