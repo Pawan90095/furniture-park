@@ -67,8 +67,8 @@ export default function ProductCard({ product }) {
                         />
                     </button>
 
-                    {/* Action Buttons */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 flex items-center gap-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 z-20">
+                    {/* Action Buttons - Always visible on mobile, hover on desktop */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 flex items-center gap-2 opacity-100 translate-y-0 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 z-20">
                         {/* Quick View */}
                         <motion.button
                             whileHover={{ scale: 1.02 }}
@@ -77,7 +77,7 @@ export default function ProductCard({ product }) {
                                 e.preventDefault();
                                 setShowQuickView(true);
                             }}
-                            className="btn btn-secondary flex-1 !py-2.5 !text-xs"
+                            className="btn btn-secondary flex-1 !py-2.5 !text-xs bg-white/95 backdrop-blur-sm"
                         >
                             <Eye size={14} className="mr-1.5" />
                             <span>Quick View</span>

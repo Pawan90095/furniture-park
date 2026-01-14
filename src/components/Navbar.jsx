@@ -152,38 +152,58 @@ export default function Navbar() {
                 <AnimatePresence>
                     {isMenuOpen && (
                         <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: '100vh' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="md:hidden bg-white fixed inset-0 z-40 pt-24 px-4 overflow-y-auto"
+                            initial={{ opacity: 0, x: '100%' }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: '100%' }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="md:hidden bg-white fixed inset-0 z-50 overflow-y-auto"
                         >
-                            <div className="flex flex-col space-y-8">
-                                <form onSubmit={handleSearch} className="relative">
+                            <div className="p-6 flex flex-col min-h-screen">
+                                <div className="flex justify-between items-center mb-8">
+                                    <h2 className="text-2xl font-serif font-bold text-primary">Menu</h2>
+                                    <button
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                                    >
+                                        <X size={24} />
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSearch} className="relative mb-8">
                                     <input
                                         type="text"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder="Search products..."
-                                        className="w-full bg-gray-100 border-none rounded-lg py-3 pl-10 pr-4 text-sm focus:ring-1 focus:ring-secondary"
+                                        className="w-full bg-gray-50 border-none rounded-xl py-4 pl-12 pr-4 text-base focus:ring-2 focus:ring-primary/10"
                                     />
-                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                                 </form>
 
-                                <div className="space-y-6">
-                                    <Link to="/" className="text-2xl font-serif text-primary block border-b border-gray-100 pb-2" onClick={() => setIsMenuOpen(false)}>Home</Link>
-
-                                    <div>
-                                        <span className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 block">Shop By Category</span>
-                                        <div className="space-y-3 pl-4">
-                                            <Link to="/shop?category=Living Room" className="block text-lg text-gray-600" onClick={() => setIsMenuOpen(false)}>Living Room</Link>
-                                            <Link to="/shop?category=Bedroom" className="block text-lg text-gray-600" onClick={() => setIsMenuOpen(false)}>Bedroom</Link>
-                                            <Link to="/shop?category=Dining" className="block text-lg text-gray-600" onClick={() => setIsMenuOpen(false)}>Dining</Link>
-                                            <Link to="/shop?category=Office" className="block text-lg text-gray-600" onClick={() => setIsMenuOpen(false)}>Office</Link>
-                                        </div>
+                                <div className="flex-1 space-y-6">
+                                    <div className="space-y-4">
+                                        <Link to="/" onClick={() => setIsMenuOpen(false)} className="block text-3xl font-serif font-bold text-primary">Home</Link>
+                                        <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block text-3xl font-serif font-bold text-gray-400 hover:text-primary transition-colors">Shop</Link>
+                                        <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block text-3xl font-serif font-bold text-gray-400 hover:text-primary transition-colors">About</Link>
+                                        <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block text-3xl font-serif font-bold text-gray-400 hover:text-primary transition-colors">Contact</Link>
                                     </div>
 
-                                    <Link to="/about" className="text-2xl font-serif text-primary block border-b border-gray-100 pb-2" onClick={() => setIsMenuOpen(false)}>About</Link>
-                                    <Link to="/contact" className="text-2xl font-serif text-primary block border-b border-gray-100 pb-2" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+                                    <hr className="border-gray-100 my-8" />
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Link to="/account" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                                            <User size={20} className="text-secondary" />
+                                            <span className="font-medium text-gray-700">Account</span>
+                                        </Link>
+                                        <Link to="/wishlist" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                                            <Heart size={20} className={`text-secondary ${wishlist.length > 0 ? 'fill-secondary' : ''}`} />
+                                            <span className="font-medium text-gray-700">Wishlist ({wishlist.length})</span>
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 text-center text-gray-400 text-sm">
+                                    © 2026 Furniture Park
                                 </div>
                             </div>
                         </motion.div>
