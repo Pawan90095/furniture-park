@@ -182,37 +182,46 @@ export default function Checkout() {
     // Helper to Create Order in DB (Abstracted from original logic)
     const handlePlaceOrder = async (paymentResult) => {
         setIsProcessing(true);
-        const orderData = {
-            orderItems: cart.map(item => ({
-                name: item.name,
-                qty: item.quantity,
-                image: item.image,
-                price: item.price,
-                product: item.id
-            })),
-            shippingAddress: {
-                address: formData.address,
-                city: formData.city,
-                postalCode: formData.pincode,
-                country: 'India' // Hardcoded for now
-            },
-            paymentMethod: paymentMethod === 'upi' || paymentMethod === 'card' ? 'Online' : 'COD',
-            paymentResult: paymentResult || {}, // Empty for COD or Pending
-            itemsPrice: subtotal,
-            shippingPrice: shipping,
-            taxPrice: 0,
-            totalPrice: total
-        };
+        try {
+            const orderData = {
+                orderItems: cart.map(item => ({
+                    name: item.name,
+                    qty: item.quantity,
+                    image: item.image,
+                    price: item.price,
+                    product: item.id
+                })),
+                shippingAddress: {
+                    address: formData.address,
+                    city: formData.city,
+                    postalCode: formData.pincode,
+                    country: 'India' // Hardcoded for now
+                },
+                paymentMethod: paymentMethod === 'upi' || paymentMethod === 'card' ? 'Online' : 'COD',
+                paymentResult: paymentResult || {}, // Empty for COD or Pending
+                itemsPrice: subtotal,
+                shippingPrice: shipping,
+                taxPrice: 0,
+                totalPrice: total
+            };
 
-        const result = await createOrder(orderData);
+            const result = await createOrder(orderData);
 
-        setIsProcessing(false);
-        setShowPaymentModal(false);
-
-        if (result.success) {
-            navigate('/order-success');
-        } else {
-            toast.error('Order Failed: ' + (result.message || 'Unknown Error'));
+            if (result.success) {
+                // SUCCESS: Keep isProcessing=true to prevent useEffect from redirecting to /shop due to empty cart
+                // The component will unmount shortly as we navigate
+                navigate('/order-success');
+            } else {
+                console.error("Order Creation Failed:", result.message);
+                setIsProcessing(false);
+                setShowPaymentModal(false);
+                toast.error('Order Failed: ' + (result.message || 'Unknown Error'));
+            }
+        } catch (error) {
+            console.error("Checkout Logic Error:", error);
+            setIsProcessing(false);
+            setShowPaymentModal(false);
+            toast.error('System Error: ' + error.message);
         }
     };
 
