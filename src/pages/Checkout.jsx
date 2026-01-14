@@ -208,8 +208,8 @@ export default function Checkout() {
             const result = await createOrder(orderData);
 
             if (result.success) {
-                // SUCCESS: Keep isProcessing=true to prevent useEffect from redirecting to /shop due to empty cart
-                // The component will unmount shortly as we navigate
+                // SUCCESS: Keep isProcessing=true to prevent useEffect from redirecting
+                clearCart(); // Clear the CartContext state
                 navigate('/order-success');
             } else {
                 console.error("Order Creation Failed:", result.message);

@@ -199,9 +199,9 @@ export const useStore = create(persist((set, get) => ({
             const data = await res.json();
 
             if (res.ok) {
-                // Clear cart locally
+                // Clear cart locally (Store) - Note: Component also needs to clear CartContext
                 set({ cart: [] });
-                // Add to local orders list (optional, or fetch fresh)
+                // Add to local orders list
                 set(state => ({ orders: [data, ...state.orders] }));
                 return { success: true, order: data };
             } else {
@@ -209,6 +209,31 @@ export const useStore = create(persist((set, get) => ({
             }
         } catch (error) {
             return { success: false, message: error.message };
+        }
+    },
+
+    fetchMyOrders: async () => {
+        const API_URL = import.meta.env.VITE_API_URL || '';
+        try {
+            const { user } = get();
+            if (!user?.token) return;
+
+            set({ loading: true });
+            const res = await fetch(`${API_URL}/api/orders/myorders`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                set({ orders: data, loading: false });
+            } else {
+                set({ loading: false, error: data.message });
+            }
+        } catch (error) {
+            console.error(error);
+            set({ loading: false, error: error.message });
         }
     },
 
