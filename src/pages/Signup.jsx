@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
+import { useToast } from '../context/ToastContext';
 import { Lock, Mail, User } from 'lucide-react';
 
 export default function Signup() {
+    const { toast } = useToast();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,7 +23,7 @@ export default function Signup() {
         } else {
             // Check if there is a way to show error in this component, currently not designed for it.
             // For now, alert or console. In a real app, add an error state.
-            alert(result.message || 'Registration failed');
+            toast.error(result.message || 'Registration failed');
         }
     };
 

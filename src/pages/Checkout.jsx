@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import { CreditCard, Banknote, ArrowRight, Truck, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useStore } from '../store/useStore';
+import { useToast } from '../context/ToastContext';
 
 export default function Checkout() {
     const { cart, clearCart, cartTotal } = useCart();
     const { user, createOrder } = useStore(); // Get user and createOrder
+    const { toast } = useToast();
     const navigate = useNavigate();
     const subtotal = cartTotal;
     const shipping = subtotal > 50000 ? 0 : 500;
@@ -43,7 +45,7 @@ export default function Checkout() {
         e.preventDefault();
         // Basic Validation
         if (!formData.address || !formData.phone) {
-            alert("Please fill in all shipping details.");
+            toast.error("Please fill in all shipping details.");
             return;
         }
         setShowPaymentModal(true);
@@ -71,7 +73,7 @@ export default function Checkout() {
         const res = await loadRazorpay();
 
         if (!res) {
-            alert('Razorpay SDK failed to load. Are you online?');
+            toast.error('Razorpay SDK failed to load. Are you online?');
             setIsProcessing(false);
             return;
         }
@@ -97,7 +99,7 @@ export default function Checkout() {
             if (!result.ok) {
                 console.error("Order Creation Failed:", data);
                 const version = data.serverVersion ? `(Server: ${data.serverVersion})` : '(Old Server Code)';
-                alert(`Order Creation Failed: ${data.message || result.statusText}\n${version}`);
+                toast.error(`Order Creation Failed: ${data.message || result.statusText}\n${version}`);
                 setIsProcessing(false);
                 return;
             }
@@ -106,7 +108,7 @@ export default function Checkout() {
             const finalKey = data.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_S0YAxnkoNZ8UHg';
 
             if (!finalKey) {
-                alert("Error: Razorpay Key ID is not configured.");
+                toast.error("Error: Razorpay Key ID is not configured.");
                 setIsProcessing(false);
                 return;
             }
@@ -146,11 +148,11 @@ export default function Checkout() {
                                 email_address: formData.email
                             });
                         } else {
-                            alert(verifyData.message || 'Payment Verification Failed');
+                            toast.error(verifyData.message || 'Payment Verification Failed');
                         }
                     } catch (error) {
                         console.error(error);
-                        alert('Internal Server Error during Verification: ' + error.message);
+                        toast.error('Internal Server Error during Verification: ' + error.message);
                     }
                 },
                 prefill: {
@@ -172,7 +174,7 @@ export default function Checkout() {
 
         } catch (error) {
             console.error("Checkout Error:", error);
-            alert(`Something went wrong: ${error.message} \n(Check Console for details)`);
+            toast.error(`Something went wrong: ${error.message}`);
             setIsProcessing(false);
         }
     };
@@ -210,7 +212,7 @@ export default function Checkout() {
         if (result.success) {
             navigate('/order-success');
         } else {
-            alert('Order Failed: ' + (result.message || 'Unknown Error'));
+            toast.error('Order Failed: ' + (result.message || 'Unknown Error'));
         }
     };
 

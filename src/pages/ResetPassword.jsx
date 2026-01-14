@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 export default function ResetPassword() {
+    const { toast } = useToast();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -14,7 +16,7 @@ export default function ResetPassword() {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            toast.error("Passwords do not match");
             return;
         }
 
@@ -31,13 +33,13 @@ export default function ResetPassword() {
             const data = await res.json();
 
             if (res.ok) {
-                alert("Password Updated Successfully");
+                toast.success("Password Updated Successfully");
                 navigate('/login');
             } else {
-                alert(data.message || 'Error updating password');
+                toast.error(data.message || 'Error updating password');
             }
         } catch (error) {
-            alert('Failed to connect to server');
+            toast.error('Failed to connect to server');
         } finally {
             setLoading(false);
         }

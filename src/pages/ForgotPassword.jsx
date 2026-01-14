@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 export default function ForgotPassword() {
+    const { toast } = useToast();
     const [email, setEmail] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -24,11 +26,11 @@ export default function ForgotPassword() {
             if (res.ok) {
                 setSubmitted(true);
             } else {
-                alert(data.message || 'Something went wrong');
+                toast.error(data.message || 'Something went wrong');
             }
         } catch (error) {
             console.error("Forgot Password Error:", error);
-            alert('Failed to connect to server. Make sure the backend is running.');
+            toast.error('Failed to connect to server. Make sure the backend is running.');
         } finally {
             setLoading(false);
         }

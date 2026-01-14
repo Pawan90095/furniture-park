@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
 import { useStore } from '../../store/useStore';
+import { useToast } from '../../context/ToastContext';
 import { Plus, Trash2, X, Check, Search, Edit, Upload } from 'lucide-react';
 
 const ProductManager = () => {
     const { products, addProduct, deleteProduct, editProduct } = useStore();
+    const { toast } = useToast();
     const [isAdding, setIsAdding] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -66,7 +68,7 @@ const ProductManager = () => {
                 price: Number(formData.price),
             });
             setEditingProduct(null);
-            alert('Product updated successfully!');
+            toast.success('Product updated successfully!');
         } else {
             // Add new product
             addProduct({
@@ -75,7 +77,7 @@ const ProductManager = () => {
                 rating: 0,
                 colors: [],
             });
-            alert('Product added successfully!');
+            toast.success('Product added successfully!');
         }
         setIsAdding(false);
         setFormData({

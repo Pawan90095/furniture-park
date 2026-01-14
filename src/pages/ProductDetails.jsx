@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 import { ArrowLeft, Check, ShoppingBag, ShieldCheck, Truck, Clock, Star, Plus, Minus, X, User, Flame, Eye, CreditCard, BadgeCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ImageZoom from '../components/ImageZoom';
 
 export default function ProductDetails() {
     const { id } = useParams();
+    const { toast } = useToast();
     const products = useStore((state) => state.products);
     const addToRecentlyViewed = useStore((state) => state.addToRecentlyViewed);
     const { addToCart } = useCart();
@@ -283,7 +285,7 @@ export default function ProductDetails() {
                                 e.preventDefault();
                                 console.log("Review submitted");
                                 setIsReviewModalOpen(false);
-                                alert("Thank you for your review!");
+                                toast.success("Thank you for your review!");
                             }}>
                                 <div className="mb-4">
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Rating</label>

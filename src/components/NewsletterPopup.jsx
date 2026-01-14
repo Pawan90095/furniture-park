@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from '../context/ToastContext';
 
 export default function NewsletterPopup() {
+    const { toast } = useToast();
     const [isOpen, setIsOpen] = useState(false);
     const [email, setEmail] = useState('');
 
@@ -28,7 +30,7 @@ export default function NewsletterPopup() {
         e.preventDefault();
         // Here you would typically integrate with a backend
         console.log('Newsletter subscription:', email);
-        alert('Thanks for subscribing!');
+        toast.success('Thanks for subscribing!');
         handleClose();
     };
 
