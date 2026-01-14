@@ -18,18 +18,15 @@ router.get('/status', (req, res) => {
         keySecretExists: !!RAZORPAY_KEY_SECRET,
         keyIdPrefix: RAZORPAY_KEY_ID?.substring(0, 12) + '***',
         isLive: RAZORPAY_KEY_ID?.startsWith('rzp_live'),
-        source: 'FORCED_HARDCODED',  // Using hardcoded credentials
-        mode: 'TEMPORARY_FIX',
+        source: 'Environment Variables',
+        mode: 'PRODUCTION_READY',
         timestamp: new Date().toISOString()
     });
 });
 
 // Initialize Razorpay credentials
-// FORCE NEW CREDENTIALS - Ignoring old environment variables until Vercel is updated
-const RAZORPAY_KEY_ID = 'rzp_test_S2wU4RHwHSxACM';  // New credentials
-const RAZORPAY_KEY_SECRET = 'BO34IGKU1M86vZ2YzvBYX69y';  // New credentials
-
-console.log('⚠️ FORCED CREDENTIALS MODE - Update Vercel env vars and remove this override!');
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
 
 // Log credential status (without exposing full keys)
 console.log('🔐 Razorpay Configuration:', {
@@ -37,7 +34,7 @@ console.log('🔐 Razorpay Configuration:', {
     keySecretExists: !!RAZORPAY_KEY_SECRET,
     keyIdPrefix: RAZORPAY_KEY_ID?.substring(0, 8),
     isLive: RAZORPAY_KEY_ID?.startsWith('rzp_live'),
-    source: process.env.RAZORPAY_KEY_ID ? 'env' : 'fallback'
+    source: 'Environment Variables'
 });
 
 // Create Razorpay instance with validated credentials
