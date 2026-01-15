@@ -85,51 +85,49 @@ export default function Checkout() {
 
             console.log("Creating order at:", `${API_URL}/api/payment/create-order`);
 
+            // Build headers object
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (user?.token) {
+                headers['Authorization'] = `Bearer ${user.token}`;
+            }
+
             const result = await fetch(`${API_URL}/api/payment/create-order`, {
                 method: 'POST',
-                const headers = {
-                    'Content-Type': 'application/json'
-                };
-                if(user?.token) {
-                    headers['Authorization'] = `Bearer ${user.token}`;
-                }
+                headers: headers,
+                body: JSON.stringify({ amount: total }),
+            });
 
-            const result = await fetch(`${API_URL}/api/payment/create-order`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({ amount: total }),
-                });
+            const data = await result.json();
 
-                const data = await result.json();
-
-                if(!result.ok) {
-                    console.error("Order Creation Failed:", data);
-            const version = data.serverVersion ? `(Server: ${data.serverVersion})` : '(Old Server Code)';
-            toast.error(`Order Creation Failed: ${data.message || result.statusText}\n${version}`);
-            setIsProcessing(false);
-            return;
-        }
+            if (!result.ok) {
+                console.error("Order Creation Failed:", data);
+                const version = data.serverVersion ? `(Server: ${data.serverVersion})` : '(Old Server Code)';
+                toast.error(`Order Creation Failed: ${data.message || result.statusText}\n${version}`);
+                setIsProcessing(false);
+                return;
+            }
 
             // 2. Get Key from Backend Response or Env or Hardcoded Fallback
             const finalKey = data.key || import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_S0YAxnkoNZ8UHg';
 
-        if (!finalKey) {
-            toast.error("Error: Razorpay Key ID is not configured.");
-            setIsProcessing(false);
-            return;
-        }
+            if (!finalKey) {
+                toast.error("Error: Razorpay Key ID is not configured.");
+                setIsProcessing(false);
+                return;
+            }
 
-        // 3. Open Razorpay Options
-        const options = {
-            key: finalKey,
-            amount: data.amount,
-            currency: data.currency,
-            name: "Furniture Park",
-            description: "Luxury Furniture Transaction",
-            order_id: data.id,
-            handler: async function (response) {
-                // 3. Verify Payment
-                try {
+            // 3. Open Razorpay Options
+            const options = {
+                key: finalKey,
+                amount: data.amount,
+                currency: data.currency,
+                name: "Furniture Park",
+                description: "Luxury Furniture Transaction",
+                order_id: data.id,
+                handler: async function (response) {
+                    // 3. Verify Payment
                     try {
                         const verifyHeaders = {
                             'Content-Type': 'application/json'
@@ -168,15 +166,15 @@ export default function Checkout() {
                 },
                 prefill: {
                     name: `${formData.firstName} ${formData.lastName}`,
-                        email: formData.email,
-                            contact: formData.phone,
-            },
+                    email: formData.email,
+                    contact: formData.phone,
+                },
                 notes: {
                     address: formData.address,
-            },
+                },
                 theme: {
                     color: "#0F172A",
-            },
+                },
             };
 
             const paymentObject = new window.Razorpay(options);
