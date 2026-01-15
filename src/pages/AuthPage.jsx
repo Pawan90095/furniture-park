@@ -334,7 +334,7 @@ const AuthPage = () => {
 
                                     <div className="mt-6">
                                         <button
-                                            onClick={() => navigate('/')}
+                                            onClick={() => navigate('/checkout')}
                                             className="text-sm text-gray-400 hover:text-auth-primary transition-colors"
                                         >
                                             Just browsing? Continue as Guest

@@ -186,13 +186,16 @@ export const useStore = create(persist((set, get) => ({
 
             // If user is logged in, attach token
             const token = user?.token;
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
 
             const res = await fetch(`${API_URL}/api/orders`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                headers: headers,
                 body: JSON.stringify(orderData),
             });
 
