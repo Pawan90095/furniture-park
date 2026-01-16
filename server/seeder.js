@@ -22,8 +22,8 @@ const importData = async () => {
         // Create Admin User
         const createdUser = await User.create({
             name: 'Admin User',
-            email: 'admin@example.com',
-            password: 'password123', // Will be hashed by pre-save hook
+            email: 'pjat95105@gmail.com',
+            password: 'pawan900@#', // Will be hashed by pre-save hook
             role: 'admin'
         });
 
