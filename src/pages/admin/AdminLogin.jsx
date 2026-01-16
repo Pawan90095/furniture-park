@@ -8,18 +8,36 @@ const AdminLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const loginUser = useStore((state) => state.loginUser);
     const login = useStore((state) => state.login);
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
 
-        if (email === 'admin@furniturepark.com' && password === 'admin') {
-            login();
-            navigate('/admin/dashboard');
+        const result = await loginUser(email, password);
+
+        if (result.success) {
+            // Check if the user is actually an admin
+            // The store 'user' state logic updates heavily, so we might need to peek at store or rely on result data if modified to return it.
+            // useStore.loginUser implementation sets state.user = data.
+            // Let's get the user from store after login or assume the backend check is enough if we trust the role?
+            // Wait, loginUser returns { success: true } or { success: false, message: ... }. 
+            // It doesn't return the user object directly in the success case in the current implementation of useStore.
+            // But it sets state.user.
+
+            const user = useStore.getState().user;
+            if (user && user.role === 'admin') {
+                login(); // Set isAuthenticated = true
+                navigate('/admin/dashboard');
+            } else {
+                setError('Access denied: You are not an admin.');
+                // Optional: logout the user from state if they are not admin
+                useStore.getState().logoutUser();
+            }
         } else {
-            setError('Invalid credentials');
+            setError(result.message || 'Invalid credentials');
         }
     };
 
