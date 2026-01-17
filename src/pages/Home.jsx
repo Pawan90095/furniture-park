@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import HeroSection from '../components/HeroSection';
 import CategoryGrid from '../components/CategoryGrid';
