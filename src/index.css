@@ -1,32 +1,20 @@
-/* AllModern Clone Design System */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Premium Scandinavian Design System */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-
-    /* CSS Variables - Design Tokens */
     :root {
-        /* Strictly Neutral Palette */
-        --color-background: #FFFFFF;
-        --color-surface: #F9FAFB;
-        --color-primary: #111111;
-        --color-secondary: #6B7280;
-        --color-border: #E5E7EB;
-
-        /* Typography */
+        --color-background: #F9F8F6;
+        --color-surface: #FFFFFF;
+        --color-primary: #2C2C2C;
+        --color-secondary: #5A5A5A;
         --font-sans: 'Inter', sans-serif;
-
-        /* Spacing */
-        --space-page: 5rem;
-        /* py-20 */
-        --space-grid: 2.5rem;
-        /* gap-10 */
+        --font-display: 'Playfair Display', serif;
     }
 
-    /* Base Styles */
     html {
         scroll-behavior: smooth;
         font-size: 16px;
@@ -36,80 +24,60 @@
         font-family: var(--font-sans);
         background-color: var(--color-background);
         color: var(--color-primary);
-        line-height: 1.5;
+        line-height: 1.6;
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Typography System */
     h1,
     h2,
     h3,
     h4,
     h5,
     h6 {
-        font-family: var(--font-sans);
-        font-weight: 600;
+        font-family: var(--font-display);
         color: var(--color-primary);
-        letter-spacing: -0.02em;
+        font-weight: 500;
+        /* Lighter weight for elegance */
+        letter-spacing: -0.01em;
     }
 
     h1 {
-        font-size: 3.5rem;
+        font-size: 3.75rem;
         line-height: 1.1;
     }
 
     h2 {
-        font-size: 2.25rem;
+        font-size: 2.5rem;
+        line-height: 1.2;
     }
 
     h3 {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
     }
 
-    p {
-        color: var(--color-secondary);
-        font-size: 1rem;
-        line-height: 1.6;
-    }
-
-    a {
-        color: var(--color-primary);
-        text-decoration: none;
-        transition: opacity 0.2s;
-    }
-
-    a:hover {
-        opacity: 0.7;
-    }
-
-    /* Button Reset */
-    button {
-        border-radius: 0;
-        /* Sharp edges */
-        font-weight: 500;
-        letter-spacing: 0.01em;
+    /* Forms */
+    input,
+    select,
+    textarea {
+        border-radius: 0.5rem;
+        /* Rounded inputs */
     }
 }
 
 @layer components {
 
-    /* Standard Button */
+    /* Elegant Button */
     .btn-primary {
-        @apply bg-[#111111] text-white px-8 py-3 rounded-none hover:bg-neutral-800 transition-colors duration-200 font-medium;
+        @apply bg-[#2C2C2C] text-white px-8 py-3 rounded-full hover:bg-[#556B2F] transition-all duration-300 shadow-md hover:shadow-lg font-medium tracking-wide text-sm;
     }
 
     .btn-outline {
-        @apply border border-neutral-200 text-neutral-900 px-8 py-3 rounded-none hover:border-black transition-colors duration-200 font-medium bg-transparent;
+        @apply border border-[#2C2C2C] text-[#2C2C2C] bg-transparent px-8 py-3 rounded-full hover:bg-[#2C2C2C] hover:text-white transition-all duration-300 font-medium tracking-wide text-sm;
     }
 
-    /* Container */
-    .container-custom {
-        max-width: 1280px;
-        /* max-w-7xl */
-        margin: 0 auto;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+    /* Card Style */
+    .card-hover {
+        @apply transition-all duration-300 hover:shadow-soft hover:-translate-y-1;
     }
 }
 
@@ -118,7 +86,6 @@
         text-wrap: balance;
     }
 
-    /* Hide Scrollbar */
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }

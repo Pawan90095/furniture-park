@@ -25,108 +25,129 @@ export default function Navbar() {
     return (
         <>
             <CartDrawer />
-            <nav className="fixed top-0 w-full bg-white z-50 border-b border-gray-200">
-                <div className="max-w-[1920px] mx-auto px-6 h-16 flex items-center justify-between">
+            <nav className="fixed top-0 w-full bg-[#FFFFFF]/95 backdrop-blur-md z-50 border-b border-[#E6E1D6] transition-all duration-300">
+                <div className="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
 
-                    {/* Left: Logo */}
-                    <div className="flex-shrink-0 flex items-center gap-4">
+                    {/* Left: Mobile Menu Trigger */}
+                    <div className="flex items-center gap-4">
                         <button
-                            className="md:hidden p-2 -ml-2 text-black hover:bg-gray-100 rounded-md"
+                            className="p-2 -ml-2 text-primary hover:bg-[#F9F8F6] rounded-full transition-colors md:hidden"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                            aria-label="Open menu"
                         >
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
-                        <Link to="/" className="text-xl font-bold tracking-tight text-black flex items-center gap-2">
-                            ALLMODERN
+
+                        <Link to="/" className="text-2xl font-display font-medium text-primary tracking-tight">
+                            Furniture Park.
                         </Link>
                     </div>
 
-                    {/* Center: Desktop Nav */}
-                    <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-900">
-                        <Link to="/shop" className="hover:text-gray-500 transition-colors">Furniture</Link>
-                        <Link to="/shop?category=Outdoor" className="hover:text-gray-500 transition-colors">Outdoor</Link>
-                        <Link to="/shop?category=Lighting" className="hover:text-gray-500 transition-colors">Lighting</Link>
-                        <Link to="/shop?category=Rugs" className="hover:text-gray-500 transition-colors">Rugs</Link>
-                        <Link to="/shop?sort=newest" className="hover:text-gray-500 transition-colors text-red-600">New</Link>
-                        <Link to="/shop?sort=sale" className="hover:text-gray-500 transition-colors text-red-600">Sale</Link>
+                    {/* Center: Desktop Nav (Mega Menu Style) */}
+                    <div className="hidden md:flex items-center space-x-10 text-sm font-medium tracking-wide text-primary">
+                        <Link to="/shop" className="hover:text-[#556B2F] transition-colors relative group py-2">
+                            Collections
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#556B2F] transition-all group-hover:w-full"></span>
+                        </Link>
+                        <Link to="/shop?category=Living Room" className="hover:text-[#556B2F] transition-colors relative group py-2">
+                            Living
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#556B2F] transition-all group-hover:w-full"></span>
+                        </Link>
+                        <Link to="/shop?category=Dining" className="hover:text-[#556B2F] transition-colors relative group py-2">
+                            Dining
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#556B2F] transition-all group-hover:w-full"></span>
+                        </Link>
+                        <Link to="/shop?category=Bedroom" className="hover:text-[#556B2F] transition-colors relative group py-2">
+                            Bedroom
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#556B2F] transition-all group-hover:w-full"></span>
+                        </Link>
+                        <Link to="/about" className="hover:text-[#556B2F] transition-colors relative group py-2">
+                            Our Story
+                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#556B2F] transition-all group-hover:w-full"></span>
+                        </Link>
                     </div>
 
                     {/* Right: Actions */}
-                    <div className="flex items-center space-x-4 md:space-x-6">
-                        {/* Search Desktop */}
-                        <form onSubmit={handleSearch} className="hidden md:flex items-center relative" role="search">
-                            <input
-                                type="text"
-                                placeholder="Search"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-48 border-b border-gray-300 py-1 text-sm focus:outline-none focus:border-black placeholder-gray-500 transition-all font-light"
-                                aria-label="Search products"
-                            />
-                            <button type="submit" className="absolute right-0 text-gray-500 hover:text-black" aria-label="Submit search">
-                                <Search size={16} />
-                            </button>
-                        </form>
-
-                        <button
-                            className="text-gray-900 hover:text-gray-500 transition-colors md:hidden"
-                            onClick={() => setIsMenuOpen(true)}
-                            aria-label="Search"
-                        >
-                            <Search size={24} />
-                        </button>
-
-                        <Link to="/account" className="text-gray-900 hover:text-gray-500 transition-colors" aria-label="Account">
-                            <span className="hidden md:inline text-xs font-medium">Account</span>
-                            <User size={24} className="md:hidden" />
-                        </Link>
-
-                        <button
-                            onClick={toggleCart}
-                            className="text-gray-900 hover:text-gray-500 transition-colors flex items-center gap-1 p-1"
-                            aria-label={`Cart with ${cartCount} items`}
-                        >
-                            <ShoppingBag size={24} />
-                            <span className="text-xs font-bold md:font-normal">{cartCount}</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Mobile Search & Menu Overlay */}
-                {isMenuOpen && (
-                    <div className="fixed inset-0 bg-white z-50 flex flex-col p-6 animate-fade-in md:hidden">
-                        <div className="flex justify-between items-center mb-8">
-                            <span className="text-xl font-bold">Menu</span>
-                            <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2"><X size={24} /></button>
-                        </div>
-
-                        <form onSubmit={handleSearch} className="mb-8 relative" role="search">
+                    <div className="flex items-center space-x-6 text-primary">
+                        <form onSubmit={handleSearch} className="hidden lg:flex items-center relative group" role="search">
                             <input
                                 type="text"
                                 placeholder="Search..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full border border-gray-300 p-3 text-sm focus:outline-none focus:border-black"
-                                aria-label="Search products mobile"
+                                className="w-0 group-hover:w-48 focus:w-48 border-b border-transparent group-hover:border-[#E6E1D6] focus:border-[#E6E1D6] py-1 text-sm bg-transparent focus:outline-none transition-all duration-300 placeholder-transparent group-hover:placeholder-gray-400"
+                                aria-label="Search products"
                             />
-                            <button type="submit" className="absolute right-3 top-3 text-gray-400" aria-label="Submit search">
-                                <Search size={18} />
+                            <button type="submit" aria-label="Submit search">
+                                <Search size={20} className="hover:text-[#556B2F] transition-colors" />
                             </button>
                         </form>
 
-                        <nav className="flex flex-col space-y-4 text-lg font-medium">
-                            <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="py-2 border-b border-gray-50">Furniture</Link>
-                            <Link to="/shop?category=Outdoor" onClick={() => setIsMenuOpen(false)} className="py-2 border-b border-gray-50">Outdoor</Link>
-                            <Link to="/shop?category=Lighting" onClick={() => setIsMenuOpen(false)} className="py-2 border-b border-gray-50">Lighting</Link>
-                            <Link to="/shop?category=Rugs" onClick={() => setIsMenuOpen(false)} className="py-2 border-b border-gray-50">Rugs</Link>
-                            <Link to="/account" onClick={() => setIsMenuOpen(false)} className="py-2 border-b border-gray-50">Account</Link>
+                        <button
+                            className="lg:hidden"
+                            onClick={() => setIsMenuOpen(true)}
+                            aria-label="Search"
+                        >
+                            <Search size={22} />
+                        </button>
+
+                        <Link to="/account" className="hover:text-[#556B2F] transition-colors" aria-label="Account">
+                            <User size={22} />
+                        </Link>
+
+                        <Link to="/wishlist" className="hidden md:block hover:text-[#556B2F] transition-colors" aria-label="Wishlist">
+                            <Heart size={22} />
+                        </Link>
+
+                        <button
+                            onClick={toggleCart}
+                            className="flex items-center gap-1 hover:text-[#556B2F] transition-colors relative"
+                            aria-label={`Cart with ${cartCount} items`}
+                        >
+                            <ShoppingBag size={22} />
+                            {cartCount > 0 && (
+                                <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-[#556B2F] rounded-full">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu Overlay */}
+                {isMenuOpen && (
+                    <div className="fixed inset-0 bg-[#F9F8F6] z-50 flex flex-col p-8 animate-fade-in md:hidden overflow-y-auto">
+                        <div className="flex justify-between items-center mb-12">
+                            <span className="text-2xl font-display font-medium text-primary">Menu</span>
+                            <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu" className="p-2 -mr-2 hover:bg-[#E6E1D6] rounded-full"><X size={24} /></button>
+                        </div>
+
+                        <form onSubmit={handleSearch} className="mb-10 relative" role="search">
+                            <input
+                                type="text"
+                                placeholder="Search collections..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full bg-white border border-[#E6E1D6] rounded-full p-4 pl-12 text-base focus:outline-none focus:border-[#556B2F] transition-colors shadow-sm"
+                                aria-label="Search products mobile"
+                            />
+                            <button type="submit" className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" aria-label="Submit search">
+                                <Search size={20} />
+                            </button>
+                        </form>
+
+                        <nav className="flex flex-col space-y-6 text-2xl font-display text-primary">
+                            <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block">Shop All</Link>
+                            <Link to="/shop?category=Living Room" onClick={() => setIsMenuOpen(false)} className="block">Living Room</Link>
+                            <Link to="/shop?category=Dining" onClick={() => setIsMenuOpen(false)} className="block">Dining Room</Link>
+                            <Link to="/shop?category=Bedroom" onClick={() => setIsMenuOpen(false)} className="block">Bedroom</Link>
+                            <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block text-[#556B2F]">Our Story</Link>
+                            <Link to="/account" onClick={() => setIsMenuOpen(false)} className="text-lg font-sans text-secondary mt-8">My Account</Link>
                         </nav>
                     </div>
                 )}
             </nav>
-            {/* Spacer for fixed navbar */}
-            <div className="h-16"></div>
+            <div className="h-20"></div>
         </>
     );
 }

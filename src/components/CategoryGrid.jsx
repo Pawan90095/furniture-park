@@ -14,18 +14,32 @@ const categories = [
 
 export default function CategoryGrid() {
     return (
-        <section className="max-w-[1920px] mx-auto px-6 py-20">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <section className="max-w-[1440px] mx-auto px-6 py-24">
+            <div className="flex justify-between items-end mb-12">
+                <h2 className="text-4xl font-display font-medium text-primary">Shop by Category</h2>
+                <Link to="/shop" className="text-secondary hover:text-[#556B2F] border-b border-transparent hover:border-[#556B2F] transition-all pb-0.5 hidden md:block">
+                    View All Categories
+                </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
                 {categories.map((cat) => (
                     <Link key={cat.name} to={cat.link} className="group block">
-                        <div className="aspect-square bg-gray-50 overflow-hidden mb-3">
+                        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-4 bg-[#F0EFEC]">
                             <img
                                 src={cat.image}
                                 alt={cat.name}
-                                className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                             />
+                            {/* Overlay Gradient for depth */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                         </div>
-                        <h3 className="text-sm font-semibold text-center text-gray-900">{cat.name}</h3>
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-medium text-primary group-hover:text-[#556B2F] transition-colors">{cat.name}</h3>
+                            <span className="w-8 h-8 rounded-full border border-[#E6E1D6] flex items-center justify-center text-primary group-hover:bg-[#556B2F] group-hover:text-white group-hover:border-[#556B2F] transition-all">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                            </span>
+                        </div>
                     </Link>
                 ))}
             </div>
