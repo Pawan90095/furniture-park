@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 const categories = [
     { name: 'Living Room', image: 'https://images.unsplash.com/photo-1567016432779-094069958ea5?q=80&w=1780&auto=format&fit=crop', link: '/shop?category=Living Room' },
@@ -16,7 +17,7 @@ export default function CategoryGrid() {
     return (
         <section className="max-w-[1440px] mx-auto px-6 py-24">
             <div className="flex justify-between items-end mb-12">
-                <h2 className="text-4xl font-display font-medium text-primary">Shop by Category</h2>
+                <h2 className="text-3xl md:text-4xl font-display font-medium text-primary">Curated for Your Space</h2>
                 <Link to="/shop" className="text-secondary hover:text-[#556B2F] border-b border-transparent hover:border-[#556B2F] transition-all pb-0.5 hidden md:block">
                     View All Categories
                 </Link>
@@ -25,20 +26,18 @@ export default function CategoryGrid() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
                 {categories.map((cat) => (
                     <Link key={cat.name} to={cat.link} className="group block">
-                        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-4 bg-[#F0EFEC]">
+                        <div className="relative aspect-square overflow-hidden rounded-2xl mb-4 bg-[#F0EFEC]">
                             <img
                                 src={cat.image}
                                 alt={cat.name}
                                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                             />
                             {/* Overlay Gradient for depth */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                         </div>
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-medium text-primary group-hover:text-[#556B2F] transition-colors">{cat.name}</h3>
-                            <span className="w-8 h-8 rounded-full border border-[#E6E1D6] flex items-center justify-center text-primary group-hover:bg-[#556B2F] group-hover:text-white group-hover:border-[#556B2F] transition-all">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                            </span>
+                            <ArrowRight size={18} className="text-primary group-hover:text-[#556B2F] opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                         </div>
                     </Link>
                 ))}
