@@ -1,87 +1,91 @@
 import React from 'react';
-import { Award, Truck, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function About() {
     return (
-        <div className="pt-24 min-h-screen bg-background pb-12">
-            {/* Header */}
-            <div className="bg-primary text-white py-20 px-4 mb-20">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="max-w-4xl mx-auto text-center"
-                >
-                    <h1 className="text-4xl md:text-5xl font-serif font-bold mb-6">Our Story</h1>
-                    <p className="text-lg font-light text-gray-300">Reshaping modern living since 2024.</p>
-                </motion.div>
+        <div className="pt-20 min-h-screen bg-white">
+            {/* Editorial Hero */}
+            <div className="relative h-[60vh] md:h-[80vh] overflow-hidden">
+                <img
+                    src="https://images.unsplash.com/photo-1616594039964-40891a909d99?q=80&w=2670&auto=format&fit=crop"
+                    alt="Design Studio"
+                    className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    <div className="text-center text-white max-w-4xl px-6">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-5xl md:text-7xl font-display font-medium mb-8 leading-tight italic"
+                        >
+                            Crafting Sanctuary
+                        </motion.h1>
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="text-xl md:text-2xl font-light tracking-wide max-w-2xl mx-auto"
+                        >
+                            We believe that good design should be accessible, sustainable, and timeless.
+                        </motion.p>
+                    </div>
+                </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-                {/* Mission */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24">
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-3xl font-serif font-bold text-primary mb-6">Crafting Comfort for Every Home</h2>
-                        <div className="prose text-gray-600 leading-relaxed">
-                            <p className="mb-4">
-                                At Furniture Park, we believe that your home should be your sanctuary. In a world that's constantly moving, we create spaces that invite you to pause.
+            {/* Our Story */}
+            <section className="py-24 px-6 max-w-[1440px] mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div className="order-2 md:order-1">
+                        <span className="text-[#556B2F] font-bold tracking-[0.2em] text-sm uppercase mb-4 block">Our Philosophy</span>
+                        <h2 className="text-4xl md:text-5xl font-display font-medium text-primary mb-8">Modern furniture for the thoughtful home.</h2>
+                        <div className="space-y-6 text-lg text-secondary leading-relaxed font-light">
+                            <p>
+                                Founded in 2024, Furniture Park began with a simple mission: to bridge the gap between high-end design and everyday living. We saw a market flooded with fast furniture that didn't last, and luxury pieces that were out of reach.
                             </p>
                             <p>
-                                Our mission is simple: to bring high-end, modern aesthetic furniture to Indian homes without the traditional markup. We partner directly with artisans to ensure every piece is crafted with integrity and style.
+                                We partner directly with master artisans in Rajasthan and certified manufacturers to bring you pieces that are not only beautiful but built to withstand the test of time.
                             </p>
                         </div>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="aspect-square bg-gray-100 rounded-sm overflow-hidden"
-                    >
-                        <img
-                            src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                            alt="Workshop"
-                            className="w-full h-full object-cover"
-                        />
-                    </motion.div>
-                </div>
-
-                {/* Why Choose Us */}
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl font-serif font-bold text-primary mb-12">Why Furniture Park?</h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="p-8 bg-white shadow-soft rounded-sm hover:-translate-y-2 transition-transform duration-300">
-                            <div className="w-16 h-16 bg-background rounded-full flex items-center justify-center mx-auto mb-6 text-secondary">
-                                <Award size={32} />
-                            </div>
-                            <h3 className="font-bold text-lg mb-2">Premium Quality</h3>
-                            <p className="text-sm text-gray-500">Hand-selected materials ensuring durability and timeless elegance.</p>
-                        </div>
-
-                        <div className="p-8 bg-white shadow-soft rounded-sm hover:-translate-y-2 transition-transform duration-300">
-                            <div className="w-16 h-16 bg-background rounded-full flex items-center justify-center mx-auto mb-6 text-secondary">
-                                <Truck size={32} />
-                            </div>
-                            <h3 className="font-bold text-lg mb-2">Fast Shipping</h3>
-                            <p className="text-sm text-gray-500">Delivery across India within 5-7 business days with secure packaging.</p>
-                        </div>
-
-                        <div className="p-8 bg-white shadow-soft rounded-sm hover:-translate-y-2 transition-transform duration-300">
-                            <div className="w-16 h-16 bg-background rounded-full flex items-center justify-center mx-auto mb-6 text-secondary">
-                                <Clock size={32} />
-                            </div>
-                            <h3 className="font-bold text-lg mb-2">24/7 Support</h3>
-                            <p className="text-sm text-gray-500">Dedicated customer service team ready to assist you anytime.</p>
+                    </div>
+                    <div className="order-1 md:order-2">
+                        <div className="aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden relative">
+                            <img src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?w=1000" alt="Craftsmanship" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>
+            </section>
 
-            </div>
+            {/* Stats / Values */}
+            <section className="bg-[#2C2C2C] text-white py-24 px-6">
+                <div className="max-w-[1440px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+                    <div>
+                        <h3 className="text-4xl md:text-5xl font-display mb-2">10k+</h3>
+                        <p className="text-gray-400 uppercase tracking-widest text-xs font-bold">Happy Homes</p>
+                    </div>
+                    <div>
+                        <h3 className="text-4xl md:text-5xl font-display mb-2">500+</h3>
+                        <p className="text-gray-400 uppercase tracking-widest text-xs font-bold">Curated Products</p>
+                    </div>
+                    <div>
+                        <h3 className="text-4xl md:text-5xl font-display mb-2">100%</h3>
+                        <p className="text-gray-400 uppercase tracking-widest text-xs font-bold">Sustainable Wood</p>
+                    </div>
+                    <div>
+                        <h3 className="text-4xl md:text-5xl font-display mb-2">24/7</h3>
+                        <p className="text-gray-400 uppercase tracking-widest text-xs font-bold">Expert Support</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Quote */}
+            <section className="py-32 px-6 text-center bg-[#F9F8F6]">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-3xl md:text-5xl font-display font-medium text-primary mb-8 leading-tight">
+                        "Your home should be filled with things that you love, things that tell your story. We're just here to help provide the characters."
+                    </h2>
+                    <p className="font-bold text-secondary uppercase tracking-widest text-sm">— The Founders</p>
+                </div>
+            </section>
         </div>
     );
 }

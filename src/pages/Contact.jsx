@@ -1,92 +1,124 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Contact() {
     return (
-        <div className="pt-32 min-h-screen bg-background pb-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <motion.div
+        <div className="pt-20 min-h-screen bg-white">
+            {/* Hero */}
+            <div className="bg-[#2C2C2C] text-white py-24 px-6 text-center">
+                <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-16"
+                    className="text-4xl md:text-6xl font-display font-medium mb-6"
                 >
-                    <h1 className="text-4xl font-serif font-bold text-primary mb-4">Get in Touch</h1>
-                    <p className="text-gray-500">We'd love to hear from you. Send us a message and we'll reply as soon as possible.</p>
-                </motion.div>
+                    Get in Touch
+                </motion.h1>
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-lg text-gray-300 max-w-2xl mx-auto font-light"
+                >
+                    We're here to help you create your perfect space. Reach out to our concierge team for assistance with orders, styling advice, or custom inquiries.
+                </motion.p>
+            </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                    {/* Form */}
-                    <div className="bg-white p-8 md:p-12 shadow-soft rounded-sm">
-                        <form className="space-y-6">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
-                                <input type="text" className="w-full bg-background border-none px-4 py-3 rounded-sm focus:ring-1 focus:ring-secondary transition-all" placeholder="John Doe" />
+            <div className="max-w-[1440px] mx-auto px-6 py-24">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                    {/* Information */}
+                    <div>
+                        <h2 className="text-3xl font-display font-medium text-primary mb-8">Contact Information</h2>
+                        <div className="space-y-10">
+                            <div className="flex gap-6">
+                                <div className="w-12 h-12 bg-[#F9F8F6] rounded-full flex items-center justify-center text-[#556B2F] shrink-0">
+                                    <Phone size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-primary mb-1">Phone Support</h3>
+                                    <p className="text-secondary mb-2">Mon-Sat from 9am to 7pm</p>
+                                    <a href="tel:+919587742740" className="text-xl font-medium text-primary hover:text-secondary decoration-current">+91 95877 42740</a>
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email</label>
-                                <input type="email" className="w-full bg-background border-none px-4 py-3 rounded-sm focus:ring-1 focus:ring-secondary transition-all" placeholder="john@example.com" />
+
+                            <div className="flex gap-6">
+                                <div className="w-12 h-12 bg-[#F9F8F6] rounded-full flex items-center justify-center text-[#556B2F] shrink-0">
+                                    <Mail size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-primary mb-1">Email Us</h3>
+                                    <p className="text-secondary mb-2">We'll respond within 24 hours</p>
+                                    <a href="mailto:info.g.rservies@gmail.com" className="text-xl font-medium text-primary hover:text-secondary decoration-current">info.g.rservies@gmail.com</a>
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Message</label>
-                                <textarea rows="5" className="w-full bg-background border-none px-4 py-3 rounded-sm focus:ring-1 focus:ring-secondary transition-all" placeholder="How can we help you?"></textarea>
+
+                            <div className="flex gap-6">
+                                <div className="w-12 h-12 bg-[#F9F8F6] rounded-full flex items-center justify-center text-[#556B2F] shrink-0">
+                                    <MapPin size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-primary mb-1">Showroom</h3>
+                                    <p className="text-secondary text-lg leading-relaxed">
+                                        Ladnun, Didwana Kuchaman<br />
+                                        Rajasthan, India - 341306
+                                    </p>
+                                </div>
                             </div>
-                            <button className="w-full bg-primary text-white py-4 font-bold uppercase tracking-widest text-sm hover:bg-secondary transition-colors duration-300">
-                                Send Message
-                            </button>
-                        </form>
+                        </div>
+
+                        <div className="mt-16 p-8 bg-[#F9F8F6] rounded-2xl border border-[#E6E1D6]">
+                            <h3 className="font-bold text-primary mb-4 flex items-center gap-2">
+                                <Clock size={20} /> Opening Hours
+                            </h3>
+                            <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                    <span className="text-secondary">Monday - Friday</span>
+                                    <span className="font-medium text-primary">9:00 AM - 8:00 PM</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-secondary">Saturday</span>
+                                    <span className="font-medium text-primary">10:00 AM - 6:00 PM</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-secondary">Sunday</span>
+                                    <span className="font-medium text-primary">Closed</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Info */}
-                    <div className="space-y-12">
-                        <div>
-                            <h3 className="text-xl font-serif font-bold mb-6">Contact Information</h3>
-                            <div className="space-y-6">
-                                <div className="flex items-start space-x-4">
-                                    <MapPin className="text-secondary mt-1" size={20} />
-                                    <div>
-                                        <p className="font-bold text-primary">Our Showroom</p>
-                                        <p className="text-gray-500">123 Design Avenue, Creative District<br />Indiranagar, Bangalore 560038</p>
-                                    </div>
+                    {/* Form */}
+                    <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-card border border-[#F0EFEC]">
+                        <h2 className="text-3xl font-display font-medium text-primary mb-8">Send us a Message</h2>
+                        <form className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-secondary uppercase tracking-wider">Name</label>
+                                    <input type="text" className="w-full bg-[#F9F8F6] border-transparent focus:bg-white focus:border-[#556B2F] focus:ring-0 rounded-xl px-4 py-3 outline-none border border-[#F9F8F6] transition-all" />
                                 </div>
-                                <div className="flex items-center space-x-4">
-                                    <Phone className="text-secondary" size={20} />
-                                    <p className="text-gray-500">+91 98765 43210</p>
-                                </div>
-                                <div className="flex items-center space-x-4">
-                                    <Mail className="text-secondary" size={20} />
-                                    <p className="text-gray-500">hello@furniturepark.com</p>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-secondary uppercase tracking-wider">Email</label>
+                                    <input type="email" className="w-full bg-[#F9F8F6] border-transparent focus:bg-white focus:border-[#556B2F] focus:ring-0 rounded-xl px-4 py-3 outline-none border border-[#F9F8F6] transition-all" />
                                 </div>
                             </div>
-                        </div>
-
-                        <div>
-                            <h3 className="text-xl font-serif font-bold mb-6">Business Hours</h3>
-                            <div className="space-y-3">
-                                <div className="flex items-center space-x-4 text-gray-500">
-                                    <Clock className="text-secondary" size={20} />
-                                    <span>Mon - Fri: 10:00 AM - 8:00 PM</span>
-                                </div>
-                                <div className="flex items-center space-x-4 text-gray-500 pl-9">
-                                    <span>Saturday: 11:00 AM - 9:00 PM</span>
-                                </div>
-                                <div className="flex items-center space-x-4 text-gray-500 pl-9">
-                                    <span>Sunday: By Appointment</span>
-                                </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-secondary uppercase tracking-wider">Subject</label>
+                                <select className="w-full bg-[#F9F8F6] border-transparent focus:bg-white focus:border-[#556B2F] focus:ring-0 rounded-xl px-4 py-3 outline-none border border-[#F9F8F6] transition-all">
+                                    <option>General Inquiry</option>
+                                    <option>Order Status</option>
+                                    <option>Custom Orders</option>
+                                    <option>Trade Program</option>
+                                </select>
                             </div>
-                        </div>
-
-                        {/* Map Placeholder */}
-                        <div className="w-full h-64 bg-gray-200 rounded-sm overflow-hidden relative">
-                            <img
-                                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                                alt="Map"
-                                className="w-full h-full object-cover opacity-60"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="bg-white px-4 py-2 font-bold text-sm shadow-md">Google Map Placeholder</span>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-secondary uppercase tracking-wider">Message</label>
+                                <textarea rows={6} className="w-full bg-[#F9F8F6] border-transparent focus:bg-white focus:border-[#556B2F] focus:ring-0 rounded-xl px-4 py-3 outline-none border border-[#F9F8F6] transition-all"></textarea>
                             </div>
-                        </div>
+                            <button className="w-full bg-[#2C2C2C] text-white py-4 rounded-xl font-bold tracking-wide flex items-center justify-center gap-2 hover:bg-[#556B2F] transition-all shadow-lg">
+                                <span>Send Message</span>
+                                <Send size={18} />
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
