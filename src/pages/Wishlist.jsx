@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { useStore } from '../store/useStore';
 import ProductCard from '../components/ProductCard';
 import EmptyState from '../components/ui/EmptyState';
-import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 
 export default function Wishlist() {
@@ -13,16 +11,19 @@ export default function Wishlist() {
     const wishlistProducts = products.filter(product => wishlist.includes(product.id));
 
     return (
-        <div className="pt-32 min-h-screen bg-white pb-24">
-            <div className="max-w-[1440px] mx-auto px-4 lg:px-12">
+        <div className="pt-24 min-h-screen bg-[#F9F8F6] pb-24">
+            <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-12">
 
-                <div className="flex items-center space-x-4 mb-12">
-                    <Heart className="w-8 h-8 text-primary fill-primary" />
-                    <h1 className="text-4xl md:text-5xl font-serif text-primary">Your Wishlist</h1>
+                {/* Header */}
+                <div className="mb-12 border-b border-[#E6E1D6] pb-8">
+                    <h1 className="text-4xl md:text-5xl font-display font-medium text-primary mb-2">My Wishlist</h1>
+                    <p className="text-secondary text-lg">
+                        {wishlistProducts.length} {wishlistProducts.length === 1 ? 'item' : 'items'} saved for later
+                    </p>
                 </div>
 
                 {wishlistProducts.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
                         {wishlistProducts.map((product) => (
                             <ProductCard key={product.id} product={product} />
                         ))}
@@ -31,8 +32,8 @@ export default function Wishlist() {
                     <EmptyState
                         icon={Heart}
                         title="Your wishlist is empty"
-                        description="Save items you love to revisit them later."
-                        actionText="Start Browsing"
+                        description="Save items you love to revisit them later. Create your own curated collection."
+                        actionText="Explore Collection"
                         actionLink="/shop"
                     />
                 )}
