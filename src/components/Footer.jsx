@@ -29,11 +29,11 @@ export default function Footer() {
                     <div className="md:col-span-2 md:col-start-6">
                         <h4 className="font-display text-xl mb-6">Collections</h4>
                         <ul className="space-y-4 text-secondary">
-                            {['Living Room', 'Dining', 'Bedroom', 'Office', 'New Arrivals'].map((item) => (
-                                <li key={item}>
-                                    <Link to="/shop" className="hover:text-[#556B2F] transition-colors">{item}</Link>
-                                </li>
-                            ))}
+                            <li><Link to="/shop?category=Living Room" className="hover:text-[#556B2F] transition-colors">Living Room</Link></li>
+                            <li><Link to="/shop?category=Dining" className="hover:text-[#556B2F] transition-colors">Dining</Link></li>
+                            <li><Link to="/shop?category=Bedroom" className="hover:text-[#556B2F] transition-colors">Bedroom</Link></li>
+                            <li><Link to="/shop?category=Office" className="hover:text-[#556B2F] transition-colors">Office</Link></li>
+                            <li><Link to="/shop?sort=newest" className="hover:text-[#556B2F] transition-colors">New Arrivals</Link></li>
                         </ul>
                     </div>
 
@@ -41,11 +41,11 @@ export default function Footer() {
                     <div className="md:col-span-2">
                         <h4 className="font-display text-xl mb-6">Company</h4>
                         <ul className="space-y-4 text-secondary">
-                            {['Our Story', 'Sustainability', 'Careers', 'Terms of Service', 'Privacy Policy'].map((item) => (
-                                <li key={item}>
-                                    <Link to="/about" className="hover:text-[#556B2F] transition-colors">{item}</Link>
-                                </li>
-                            ))}
+                            <li><Link to="/about" className="hover:text-[#556B2F] transition-colors">Our Story</Link></li>
+                            <li><Link to="/contact" className="hover:text-[#556B2F] transition-colors">Contact Us</Link></li>
+                            <li><Link to="/shipping-returns" className="hover:text-[#556B2F] transition-colors">Shipping & Returns</Link></li>
+                            <li><Link to="/terms" className="hover:text-[#556B2F] transition-colors">Terms of Service</Link></li>
+                            <li><Link to="/privacy" className="hover:text-[#556B2F] transition-colors">Privacy Policy</Link></li>
                         </ul>
                     </div>
 

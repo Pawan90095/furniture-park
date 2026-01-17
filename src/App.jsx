@@ -27,6 +27,9 @@ const About = lazy(() => import('./pages/About'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Contact = lazy(() => import('./pages/Contact'));
+const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 
 // Account Pages
 const AccountLayout = lazy(() => import('./pages/account/AccountLayout'));
@@ -89,6 +92,9 @@ function App() {
                                 <Route path="/order-success" element={<OrderSuccess />} />
                                 <Route path="/about" element={<About />} />
                                 <Route path="/contact" element={<Contact />} />
+                                <Route path="/shipping-returns" element={<ShippingPolicy />} />
+                                <Route path="/privacy" element={<PrivacyPolicy />} />
+                                <Route path="/terms" element={<TermsOfService />} />
 
                                 {/* User Auth Routes */}
                                 <Route path="/login" element={<AuthPage />} />
