@@ -38,9 +38,9 @@ export default function CartDrawer() {
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.5 }}
+                        animate={{ opacity: 0.4 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black z-40"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
                         onClick={() => setIsCartOpen(false)}
                     />
 
@@ -50,43 +50,39 @@ export default function CartDrawer() {
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
-                        transition={{ type: 'tween', duration: 0.3 }}
-                        className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+                        transition={{ type: 'tween', duration: 0.3, ease: "easeOut" }}
+                        className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col border-l border-[#F0EFEC]"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                            <h2 className="text-xl font-serif font-bold text-primary flex items-center gap-2">
-                                <ShoppingBag size={20} />
-                                Your Cart ({cart.reduce((acc, item) => acc + item.quantity, 0)})
+                        <div className="flex items-center justify-between p-8 border-b border-[#F0EFEC]">
+                            <h2 className="text-2xl font-display font-medium text-primary flex items-center gap-3">
+                                Shopping Bag
+                                <span className="text-lg text-secondary font-sans font-normal">({cart.reduce((acc, item) => acc + item.quantity, 0)})</span>
                             </h2>
                             <button
                                 onClick={() => setIsCartOpen(false)}
-                                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+                                className="p-2 hover:bg-[#F9F8F6] rounded-full transition-colors text-primary"
                             >
-                                <X size={24} />
+                                <X size={20} />
                             </button>
                         </div>
 
-                        {/* Free Shipping Progress */}
+                        {/* Free Shipping Progress - Minimal & Elegant */}
                         {cart.length > 0 && (
-                            <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
-                                {cartTotal >= 50000 ? (
-                                    <div className="flex items-center text-green-600 text-sm font-bold mb-2">
-                                        <div className="bg-green-100 p-1 rounded-full mr-2">
-                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                        🎉 You've unlocked Free Premium Shipping!
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-600 mb-2">
-                                        Add <span className="font-bold text-primary">₹{(50000 - cartTotal).toLocaleString()}</span> more for <span className="font-bold text-secondary">Free Shipping</span>
-                                    </p>
-                                )}
-                                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="px-8 py-6 bg-[#F9F8F6]">
+                                <div className="mb-2 flex justify-between text-sm">
+                                    {cartTotal >= 50000 ? (
+                                        <span className="text-[#556B2F] font-medium">Free shipping unlocked</span>
+                                    ) : (
+                                        <span className="text-secondary">
+                                            Add <span className="text-primary font-medium">₹{(50000 - cartTotal).toLocaleString()}</span> for free shipping
+                                        </span>
+                                    )}
+                                    <span className="text-secondary">{Math.min(100, Math.round((cartTotal / 50000) * 100))}%</span>
+                                </div>
+                                <div className="h-1 bg-[#E6E1D6] rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-secondary transition-all duration-500 ease-out rounded-full"
+                                        className="h-full bg-[#2C2C2C] transition-all duration-500 ease-out rounded-full"
                                         style={{ width: `${Math.min(100, (cartTotal / 50000) * 100)}%` }}
                                     ></div>
                                 </div>
@@ -94,64 +90,64 @@ export default function CartDrawer() {
                         )}
 
                         {/* Body */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                        <div className="flex-1 overflow-y-auto p-8 space-y-8">
                             {cart.length === 0 ? (
-                                <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
-                                        <ShoppingBag size={32} />
+                                <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
+                                    <div className="w-16 h-16 bg-[#F9F8F6] rounded-full flex items-center justify-center text-secondary">
+                                        <ShoppingBag size={24} />
                                     </div>
-                                    <p className="text-gray-500 font-medium">Your cart is empty</p>
+                                    <div>
+                                        <p className="text-primary font-display text-lg mb-2">Your bag is empty</p>
+                                        <p className="text-secondary text-sm">Discover our new collection.</p>
+                                    </div>
                                     <button
                                         onClick={() => setIsCartOpen(false)}
-                                        className="text-secondary font-bold hover:underline"
+                                        className="text-[#556B2F] border-b border-[#556B2F] pb-0.5 hover:text-primary hover:border-primary transition-all text-sm font-medium"
                                     >
-                                        Start Shopping
+                                        Continue Shopping
                                     </button>
                                 </div>
                             ) : (
                                 cart.map((item) => (
-                                    <div key={item.id} className="flex gap-4">
-                                        <div className="w-20 h-20 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
-                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                    <div key={item.id} className="flex gap-5 group">
+                                        <div className="w-24 aspect-[4/5] bg-[#F0EFEC] rounded-lg overflow-hidden flex-shrink-0">
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                         </div>
-                                        <div className="flex-1 flex flex-col justify-between">
-                                            <div>
-                                                <div className="flex justify-between items-start">
-                                                    <h3 className="font-medium text-primary line-clamp-2 pr-4">{item.name}</h3>
-                                                    <button
-                                                        onClick={() => removeFromCart(item.id)}
-                                                        className="text-gray-400 hover:text-red-500 transition-colors"
-                                                    >
-                                                        <Trash2 size={16} />
-                                                    </button>
-                                                </div>
-                                                {item.selectedColor && (
-                                                    <div className="flex items-center gap-1mt-1">
-                                                        <div
-                                                            className="w-3 h-3 rounded-full border border-gray-200"
-                                                            style={{ backgroundColor: item.selectedColor }}
-                                                        />
-                                                    </div>
-                                                )}
+                                        <div className="flex-1 flex flex-col">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <Link to={`/product/${item.id}`} className="font-display text-primary text-lg hover:text-[#556B2F] transition-colors line-clamp-2 pr-4" onClick={() => setIsCartOpen(false)}>
+                                                    {item.name}
+                                                </Link>
+                                                <button
+                                                    onClick={() => removeFromCart(item.id)}
+                                                    className="text-gray-300 hover:text-red-500 transition-colors"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
                                             </div>
-                                            <div className="flex items-center justify-between mt-2">
-                                                <div className="flex items-center border border-gray-200 rounded-md">
+
+                                            <p className="text-sm text-secondary mb-4">
+                                                ₹{item.price.toLocaleString()}
+                                            </p>
+
+                                            <div className="mt-auto flex items-center justify-between">
+                                                <div className="flex items-center border border-[#E6E1D6] rounded-full px-2 py-1">
                                                     <button
                                                         onClick={() => updateQuantity(item.id, -1)}
-                                                        className="p-1 hover:bg-gray-50 text-gray-600 transition-colors disabled:opacity-50"
+                                                        className="p-1 hover:text-[#556B2F] text-secondary transition-colors disabled:opacity-30"
                                                         disabled={item.quantity <= 1}
                                                     >
                                                         <Minus size={14} />
                                                     </button>
-                                                    <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                                                    <span className="w-8 text-center text-sm font-medium text-primary">{item.quantity}</span>
                                                     <button
                                                         onClick={() => updateQuantity(item.id, 1)}
-                                                        className="p-1 hover:bg-gray-50 text-gray-600 transition-colors"
+                                                        className="p-1 hover:text-[#556B2F] text-secondary transition-colors"
                                                     >
                                                         <Plus size={14} />
                                                     </button>
                                                 </div>
-                                                <span className="font-bold text-primary">₹{(item.price * item.quantity).toLocaleString()}</span>
+                                                <span className="font-medium text-primary">₹{(item.price * item.quantity).toLocaleString()}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -161,20 +157,20 @@ export default function CartDrawer() {
 
                         {/* Footer */}
                         {cart.length > 0 && (
-                            <div className="p-6 border-t border-gray-100 bg-gray-50">
+                            <div className="p-8 border-t border-[#F0EFEC] bg-white">
                                 <div className="flex justify-between items-center mb-6">
-                                    <span className="text-gray-600 font-medium">Subtotal</span>
-                                    <span className="text-2xl font-bold text-primary">₹{cartTotal.toLocaleString()}</span>
+                                    <span className="text-secondary">Subtotal</span>
+                                    <span className="text-2xl font-display font-medium text-primary">₹{cartTotal.toLocaleString()}</span>
                                 </div>
-                                <button
-                                    onClick={handleCheckout}
-                                    className="w-full bg-primary text-white py-4 px-6 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-secondary transition-all shadow-lg active:scale-[0.98]"
-                                >
-                                    Checkout <ArrowRight size={20} />
-                                </button>
-                                <p className="text-center text-xs text-gray-500 mt-4">
+                                <p className="text-xs text-secondary mb-6 text-center">
                                     Shipping & taxes calculated at checkout
                                 </p>
+                                <button
+                                    onClick={handleCheckout}
+                                    className="w-full bg-[#2C2C2C] text-white py-4 px-6 rounded-full font-medium flex items-center justify-center gap-3 hover:bg-[#556B2F] transition-all shadow-md active:scale-[0.99]"
+                                >
+                                    Proceed to Checkout <ArrowRight size={18} />
+                                </button>
                             </div>
                         )}
                     </motion.div>
