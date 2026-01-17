@@ -1,79 +1,73 @@
 import React from 'react';
-import { Facebook, Instagram, Twitter, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="bg-primary text-white pt-24 pb-12">
-            <div className="max-w-[1440px] mx-auto px-4 lg:px-12">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 mb-20 border-b border-gray-800 pb-20">
+        <footer className="bg-white border-t border-gray-200 pt-16 pb-8 text-sm">
+            <div className="max-w-[1920px] mx-auto px-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
 
-                    {/* Brand Column */}
-                    <div className="md:col-span-4">
-                        <Link to="/" className="inline-block mb-8">
-                            <span className="text-3xl font-serif font-bold tracking-tight text-white">Furniture Park.</span>
-                        </Link>
-                        <p className="text-gray-400 text-base leading-relaxed mb-8 max-w-sm">
-                            Curating exceptional spaces for the modern connoisseur. We blend timeless artistry with functional design to create furniture that tells a story.
-                        </p>
-                        <div className="flex space-x-6">
-                            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-secondary transition-colors cursor-pointer group">
-                                <Instagram size={18} className="text-white" />
-                            </div>
-                            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-secondary transition-colors cursor-pointer group">
-                                <Facebook size={18} className="text-white" />
-                            </div>
-                            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-secondary transition-colors cursor-pointer group">
-                                <Twitter size={18} className="text-white" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Links Columns */}
-                    <div className="md:col-span-2">
-                        <h4 className="font-serif text-xl mb-8 text-white">Shop</h4>
-                        <ul className="space-y-4 text-sm text-gray-400">
-                            <li className="hover:text-secondary cursor-pointer transition-colors"><Link to="/shop">Living Room</Link></li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors"><Link to="/shop">Bedroom</Link></li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors"><Link to="/shop">Dining</Link></li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors"><Link to="/shop">Office</Link></li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors"><Link to="/shop">New Arrivals</Link></li>
+                    {/* Column 1: Customer Service */}
+                    <div>
+                        <h4 className="font-bold mb-4 text-black">Customer Service</h4>
+                        <ul className="space-y-3 text-gray-500">
+                            <li><Link to="/contact" className="hover:text-black hover:underline">Help Center</Link></li>
+                            <li><Link to="/contact" className="hover:text-black hover:underline">Track Your Order</Link></li>
+                            <li><Link to="/contact" className="hover:text-black hover:underline">Returns & Exchanges</Link></li>
+                            <li><Link to="/contact" className="hover:text-black hover:underline">Shipping Info</Link></li>
                         </ul>
                     </div>
 
-                    <div className="md:col-span-2">
-                        <h4 className="font-serif text-xl mb-8 text-white">Support</h4>
-                        <ul className="space-y-4 text-sm text-gray-400">
-                            <li className="hover:text-secondary cursor-pointer transition-colors"><Link to="/contact">Contact Us</Link></li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors">FAQ</li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors">Shipping & Returns</li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors">Care Guide</li>
-                            <li className="hover:text-secondary cursor-pointer transition-colors">Warranty</li>
+                    {/* Column 2: Account */}
+                    <div>
+                        <h4 className="font-bold mb-4 text-black">My Account</h4>
+                        <ul className="space-y-3 text-gray-500">
+                            <li><Link to="/account" className="hover:text-black hover:underline">Manage Account</Link></li>
+                            <li><Link to="/wishlist" className="hover:text-black hover:underline">My Favorites</Link></li>
+                            <li><Link to="/account/orders" className="hover:text-black hover:underline">Order History</Link></li>
                         </ul>
                     </div>
 
-                    {/* Newsletter Column */}
-                    <div className="md:col-span-4">
-                        <h4 className="font-serif text-xl mb-4 text-white">Join our world</h4>
-                        <p className="text-gray-400 text-sm mb-8">Receive exclusive offers and design inspiration directly to your inbox.</p>
-                        <div className="relative">
+                    {/* Column 3: About */}
+                    <div>
+                        <h4 className="font-bold mb-4 text-black">About Us</h4>
+                        <ul className="space-y-3 text-gray-500">
+                            <li><Link to="/about" className="hover:text-black hover:underline">Who We Are</Link></li>
+                            <li><Link to="/contact" className="hover:text-black hover:underline">Careers</Link></li>
+                            <li><Link to="/contact" className="hover:text-black hover:underline">Accessibility</Link></li>
+                        </ul>
+                    </div>
+
+                    {/* Column 4: Newsletter */}
+                    <div>
+                        <h4 className="font-bold mb-4 text-black">Get the best deals</h4>
+                        <p className="text-gray-500 mb-4">Sign up for exclusive offers and style inspiration.</p>
+                        <div className="flex">
                             <input
                                 type="email"
-                                placeholder="Enter your email address"
-                                className="w-full bg-transparent border-b border-gray-700 text-white px-0 py-4 text-base focus:outline-none focus:border-secondary transition-colors placeholder-gray-600"
+                                placeholder="Email Address"
+                                className="flex-1 border border-gray-300 p-2 text-sm focus:outline-none focus:border-black rounded-none"
                             />
-                            <button className="absolute right-0 top-1/2 transform -translate-y-1/2 text-secondary hover:text-white transition-colors">
-                                <ArrowRight size={24} />
+                            <button className="bg-black text-white px-4 py-2 text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors">
+                                Sign Up
                             </button>
+                        </div>
+                        <div className="flex space-x-6 mt-6">
+                            <Instagram size={20} className="text-gray-400 hover:text-black cursor-pointer" />
+                            <Facebook size={20} className="text-gray-400 hover:text-black cursor-pointer" />
+                            <Twitter size={20} className="text-gray-400 hover:text-black cursor-pointer" />
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
-                    <p>&copy; {new Date().getFullYear()} Furniture Park. All rights reserved.</p>
-                    <div className="flex space-x-8 mt-4 md:mt-0">
-                        <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
-                        <span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span>
+                {/* Bottom Bar */}
+                <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+                    <p>© 2026 AllModern Clone. All Rights Reserved.</p>
+                    <div className="flex space-x-6 mt-4 md:mt-0">
+                        <span className="hover:text-black cursor-pointer">Privacy Policy</span>
+                        <span className="hover:text-black cursor-pointer">Terms of Use</span>
+                        <span className="hover:text-black cursor-pointer">Do Not Sell My Info</span>
                     </div>
                 </div>
             </div>

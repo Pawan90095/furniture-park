@@ -1,65 +1,62 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
-import HeroCarousel from '../components/HeroCarousel';
-import TrustStrip from '../components/TrustStrip';
-import BentoGrid from '../components/BentoGrid';
-import HorizontalProductScroll from '../components/HorizontalProductScroll';
+import HeroSection from '../components/HeroSection';
+import CategoryGrid from '../components/CategoryGrid';
+import ProductCard from '../components/ProductCard';
 import PromoBanner from '../components/PromoBanner';
-import ShopTheLook from '../components/ShopTheLook';
-import TestimonialCarousel from '../components/TestimonialCarousel';
-import StatsCounter from '../components/StatsCounter';
-import CustomerPhotoGallery from '../components/CustomerPhotoGallery';
-import AsSeenIn from '../components/AsSeenIn';
-import RecentlyViewed from '../components/RecentlyViewed';
+
+// Simple Grid Component purely for internal Home use
+const SimpleProductGrid = ({ title, products }) => {
+    if (!products || products.length === 0) return null;
+    return (
+        <section className="max-w-[1920px] mx-auto px-6 py-20">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center tracking-tight text-balance">{title}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
+                {products.map(product => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
+            </div>
+        </section>
+    );
+};
 
 export default function Home() {
     const products = useStore((state) => state.products);
 
-    // Get different product sets
-    const newArrivals = products.slice(0, 8);
-    const bestsellers = products.filter(p => p.isBestseller || p.rating > 4.7).slice(0, 8);
+    // Filter Logic
+    const trending = products.filter(p => p.rating >= 4.5).slice(0, 4);
+    const newArrivals = products.slice(0, 8); // Assuming last added are new
+    const bestSellers = products.filter(p => p.reviews > 10).slice(0, 4); // Dummy logic for best sellers
 
     return (
         <div className="bg-white min-h-screen">
-            {/* 1. Hero Carousel */}
-            <HeroCarousel />
+            {/* 1. Hero */}
+            <HeroSection />
 
-            {/* 2. Trust Strip */}
-            <TrustStrip />
+            {/* 2. Shop Categories */}
+            <CategoryGrid />
 
-            {/* 3. Shop By Category (Bento Grid) */}
-            <BentoGrid />
+            {/* 3. Trending Now */}
+            <SimpleProductGrid title="Trending Now" products={trending} />
 
-            {/* 4. New Arrivals (Horizontal Scroll) */}
-            <HorizontalProductScroll title="Fresh This Week" products={newArrivals} />
+            {/* 4. New Arrivals */}
+            <SimpleProductGrid title="New Arrivals" products={newArrivals} />
 
-            {/* 5. Testimonial Carousel */}
-            <TestimonialCarousel />
+            {/* 5. Best Sellers */}
+            <SimpleProductGrid title="Best Sellers" products={bestSellers} />
 
-            {/* 6. Promotional Banner */}
-            <PromoBanner />
-
-            {/* 7. Bestsellers (Horizontal Scroll) */}
-            <section className="py-16 bg-white">
-                <div className="max-w-[1440px] mx-auto">
-                    <HorizontalProductScroll title="Bestsellers" products={bestsellers} />
+            {/* 6. Promo Banner (Reusing or updating if needed. Note: Ensure styles match) */}
+            <div className="max-w-[1920px] mx-auto px-6 py-20">
+                <div className="bg-gray-100 py-24 px-8 text-center">
+                    <h2 className="text-3xl font-bold mb-4">Join the list</h2>
+                    <p className="text-gray-500 mb-8">Unlock 15% off your first order when you sign up.</p>
+                    <div className="max-w-md mx-auto flex">
+                        <input className="flex-1 bg-white p-3 text-sm focus:outline-none border border-transparent focus:border-black" placeholder="Email Address" />
+                        <button className="bg-black text-white px-8 py-3 text-sm font-bold uppercase">Subscribe</button>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            {/* 8. Stats Counter */}
-            <StatsCounter />
-
-            {/* 9. Customer Photo Gallery */}
-            <CustomerPhotoGallery />
-
-            {/* 10. Recently Viewed */}
-            <RecentlyViewed />
-
-            {/* 11. Shop The Look */}
-            <ShopTheLook />
-
-            {/* 12. As Seen In */}
-            <AsSeenIn />
         </div>
     );
 }

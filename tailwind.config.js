@@ -7,30 +7,33 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: "#2c2c2c", // Dark Charcoal
-                secondary: "#A05A2C", // Burnt Sienna
-                accent: "#0058A3",
-                background: "#F9F8F6", // Alabaster
-                surface: "#FFFFFF",
-                taupe: "#5a5a5a", // Body text
-                // Auth Specific
-                'auth-primary': "#5D4037",
-                'auth-bg': "#F9F8F6",
-                'auth-text': "#2C2C2C",
-                'auth-accent': "#C4A484",
-                'auth-error': "#B71C1C",
-                'auth-success': "#388E3C",
+                primary: "#111111", // Main Text (Soft Black)
+                secondary: "#6B7280", // Muted Text (Gray)
+                accent: "#000000", // Strong Accent (Pure Black)
+                background: "#FFFFFF", // White
+                surface: "#F9FAFB", // Light Gray Surface
+                border: "#E5E7EB", // Light Border
+
+                // Keep auth colors but map them to the new neutral system where possible
+                'auth-primary': "#111111",
+                'auth-bg': "#FFFFFF",
+                'auth-text': "#111111",
+                'auth-accent': "#000000",
+                'auth-error': "#EF4444",
+                'auth-success': "#10B981",
             },
             fontFamily: {
-                display: ['Playfair Display', 'serif'],
-                body: ['Work Sans', 'sans-serif'],
-                sans: ['Work Sans', 'sans-serif'],
-                'auth-heading': ['Playfair Display', 'serif'],
-                'auth-body': ['Lato', 'sans-serif'],
+                sans: ['Inter', 'sans-serif'],
+                display: ['Inter', 'sans-serif'],
+                body: ['Inter', 'sans-serif'],
             },
-            boxShadow: {
-                'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                'luxury': '0 20px 40px -4px rgba(0, 0, 0, 0.1)',
+            borderRadius: {
+                // Defaulting to sharp/minimal
+                'none': '0',
+                'sm': '0.125rem',
+                'DEFAULT': '0.25rem',
+                'md': '0.375rem',
+                'lg': '0.5rem',
             }
         },
     },
