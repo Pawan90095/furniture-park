@@ -2,108 +2,180 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import ProductCard from '../components/ProductCard';
 import EmptyState from '../components/ui/EmptyState';
-import { Filter, Search, X, PackageOpen } from 'lucide-react';
+// Added ChevronDown for collapsible filters
+import { Filter, Search, X, PackageOpen, ChevronDown, Check } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const CATEGORIES = ['All', 'Living Room', 'Bedroom', 'Dining', 'Office'];
+const CATEGORIES = ['All', 'Living Room', 'Bedroom', 'Dining', 'Office', 'Lighting', 'Decor', 'Outdoor'];
+const COLORS = ['#000000', '#FFFFFF', '#808080', '#A52A2A', '#D2B48C', '#0000FF']; // Simple color mock
+const SORT_OPTIONS = [
+    { label: 'Recommended', value: 'recommended' },
+    { label: 'Newest Arrivals', value: 'newest' },
+    { label: 'Price: Low to High', value: 'price_asc' },
+    { label: 'Price: High to Low', value: 'price_desc' },
+];
 
 export default function Shop() {
     const products = useStore((state) => state.products);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Get params from URL
+    // URL Params
     const categoryParam = searchParams.get('category') || 'All';
     const queryParam = searchParams.get('q') || '';
 
-    // Local state to sync with URL
+    // States
     const [selectedCategory, setSelectedCategory] = useState(categoryParam);
+    const [sortBy, setSortBy] = useState('recommended');
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-    // Update URL when local filter changes
-    const handleCategoryChange = (cat) => {
-        setSelectedCategory(cat);
-        if (cat === 'All') {
-            setSearchParams({});
-        } else {
-            setSearchParams({ category: cat });
-        }
-    };
-
-    // Sync state if URL changes (e.g. back button)
+    // Sync state
     useEffect(() => {
         if (categoryParam) setSelectedCategory(categoryParam);
     }, [categoryParam]);
 
-    // Filtering Logic
+    const handleCategoryChange = (cat) => {
+        setSelectedCategory(cat);
+        if (cat === 'All') setSearchParams({});
+        else setSearchParams({ category: cat });
+        setMobileFiltersOpen(false);
+    };
+
+    // Filter Logic
     const filteredProducts = products.filter(product => {
         const matchCategory = selectedCategory === 'All' || product.category === selectedCategory;
         const matchQuery = queryParam
-            ? product.name.toLowerCase().includes(queryParam.toLowerCase()) || product.description.toLowerCase().includes(queryParam.toLowerCase())
+            ? product.name.toLowerCase().includes(queryParam.toLowerCase()) ||
+            (product.description || '').toLowerCase().includes(queryParam.toLowerCase())
             : true;
-
         return matchCategory && matchQuery;
+    }).sort((a, b) => {
+        if (sortBy === 'price_asc') return a.price - b.price;
+        if (sortBy === 'price_desc') return b.price - a.price;
+        if (sortBy === 'newest') return new Date(b.createdAt) - new Date(a.createdAt);
+        return 0; // recommended (default order)
     });
 
     return (
-        <div className="pt-32 min-h-screen bg-background pb-24">
-            <div className="max-w-[1440px] mx-auto px-4 lg:px-12">
-
-                {/* Header */}
-                <div className="mb-12">
-                    <h1 className="text-4xl md:text-5xl font-serif text-primary mb-4">
-                        {queryParam ? `Search Results: "${queryParam}"` : 'Shop Collection'}
-                    </h1>
-                    {!queryParam && (
-                        <p className="text-gray-500 font-light max-w-2xl">
-                            Explore our curated selection of premium furniture, designed to bring elegance and functionality to your modern home.
-                        </p>
-                    )}
+        <div className="pt-20 min-h-screen bg-background">
+            {/* 1. Hero / Header (Editorial Style) */}
+            <div className="bg-[#F9F8F6] pt-12 pb-16 px-6 border-b border-[#E6E1D6]">
+                <div className="max-w-[1920px] mx-auto">
+                    <div className="max-w-4xl">
+                        <span className="text-xs font-bold tracking-[0.2em] text-[#556B2F] uppercase mb-4 block">Collections</span>
+                        <h1 className="text-4xl md:text-6xl font-display font-medium text-primary mb-6">
+                            {queryParam ? `Results for "${queryParam}"` : (selectedCategory === 'All' ? 'All Furniture' : selectedCategory)}
+                        </h1>
+                        {!queryParam && (
+                            <p className="text-secondary text-lg max-w-2xl leading-relaxed">
+                                Curated pieces for the modern home. Designed with purpose, crafted with care, and built to last a lifetime.
+                            </p>
+                        )}
+                    </div>
                 </div>
+            </div>
 
+            <div className="max-w-[1920px] mx-auto px-6 py-12">
                 <div className="flex flex-col lg:flex-row gap-12">
-                    {/* Sidebar (Filters) */}
-                    <div className="w-full lg:w-64 flex-shrink-0">
-                        <div className="sticky top-32">
-                            {/* Clear Search Button if active */}
-                            {queryParam && (
-                                <button
-                                    onClick={() => setSearchParams({})}
-                                    className="w-full flex items-center justify-center space-x-2 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg mb-6 transition-colors font-medium text-sm"
-                                >
-                                    <X size={16} />
-                                    <span>Clear Search</span>
-                                </button>
-                            )}
 
-                            <div className="flex items-center space-x-2 font-serif text-xl mb-6 pb-4 border-b border-gray-200">
-                                <Filter size={20} />
-                                <span>Filters</span>
+                    {/* 2. Sticky Sidebar (Desktop) */}
+                    <div className="hidden lg:block w-64 flex-shrink-0">
+                        <div className="sticky top-32 space-y-8">
+                            {/* Categories */}
+                            <div>
+                                <h3 className="font-sans font-bold text-sm text-primary uppercase tracking-wider mb-4">Category</h3>
+                                <div className="space-y-1">
+                                    {CATEGORIES.map((cat) => (
+                                        <button
+                                            key={cat}
+                                            onClick={() => handleCategoryChange(cat)}
+                                            className={`block w-full text-left px-3 py-2 text-sm rounded-md transition-all ${selectedCategory === cat
+                                                    ? 'font-bold text-primary bg-[#F9F8F6]'
+                                                    : 'text-secondary hover:text-primary hover:bg-[#F9F8F6]/50'
+                                                }`}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <h4 className="font-bold text-xs uppercase tracking-widest text-secondary mb-4">Category</h4>
-                                {CATEGORIES.map((category) => (
-                                    <button
-                                        key={category}
-                                        onClick={() => handleCategoryChange(category)}
-                                        className={`block w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all ${selectedCategory === category
-                                            ? 'bg-primary text-white shadow-lg'
-                                            : 'text-gray-600 hover:bg-white hover:shadow-soft'
-                                            }`}
-                                    >
-                                        {category}
-                                    </button>
-                                ))}
+                            {/* Sort */}
+                            <div>
+                                <h3 className="font-sans font-bold text-sm text-primary uppercase tracking-wider mb-4">Sort By</h3>
+                                <div className="space-y-1">
+                                    {SORT_OPTIONS.map((opt) => (
+                                        <button
+                                            key={opt.value}
+                                            onClick={() => setSortBy(opt.value)}
+                                            className="flex items-center w-full text-left px-3 py-2 text-sm text-secondary hover:text-primary transition-colors"
+                                        >
+                                            <div className={`w-4 h-4 rounded-full border border-gray-300 mr-3 flex items-center justify-center ${sortBy === opt.value ? 'border-primary' : ''}`}>
+                                                {sortBy === opt.value && <div className="w-2 h-2 rounded-full bg-primary" />}
+                                            </div>
+                                            {opt.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Price Range (Mock) */}
+                            <div>
+                                <h3 className="font-sans font-bold text-sm text-primary uppercase tracking-wider mb-4">Price Range</h3>
+                                <div className="px-3">
+                                    <input type="range" className="w-full accent-[#2C2C2C]" />
+                                    <div className="flex justify-between text-xs text-secondary mt-2">
+                                        <span>₹0</span>
+                                        <span>₹5,00,000+</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Product Grid */}
+                    {/* 3. Main Content */}
                     <div className="flex-1">
-                        <div className="flex justify-between items-center mb-6">
-                            <p className="text-gray-500 text-sm">Showing <span className="font-bold text-primary">{filteredProducts.length}</span> results</p>
+                        {/* Mobile Filter Toggle */}
+                        <div className="lg:hidden mb-8 flex justify-between items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                            <button
+                                onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                                className="flex items-center gap-2 font-medium text-primary"
+                            >
+                                <Filter size={20} />
+                                <span>Filter & Sort</span>
+                            </button>
+                            <span className="text-sm text-secondary">{filteredProducts.length} Items</span>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
+                        {/* Mobile Filters Drawer */}
+                        {mobileFiltersOpen && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                className="lg:hidden bg-[#F9F8F6] p-6 rounded-xl mb-8 space-y-6 overflow-hidden"
+                            >
+                                <div>
+                                    <h4 className="font-bold text-sm mb-3">Categories</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {CATEGORIES.map(cat => (
+                                            <button
+                                                key={cat}
+                                                onClick={() => handleCategoryChange(cat)}
+                                                className={`px-4 py-2 text-sm rounded-full border transition-colors ${selectedCategory === cat
+                                                        ? 'bg-primary text-white border-primary'
+                                                        : 'bg-white text-secondary border-gray-200'
+                                                    }`}
+                                            >
+                                                {cat}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* Results Grid */}
+                        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
                             {filteredProducts.map((product) => (
                                 <ProductCard key={product.id} product={product} />
                             ))}
@@ -112,14 +184,21 @@ export default function Shop() {
                         {filteredProducts.length === 0 && (
                             <EmptyState
                                 icon={PackageOpen}
-                                title="No products found"
-                                description={`We couldn't find any matches for "${queryParam || selectedCategory}".`}
-                                actionText="View All Products"
+                                title="No matching pieces found"
+                                description="Try adjusting your filters or search terms to find what you're looking for."
+                                actionText="View All Furniture"
                                 onAction={() => {
                                     setSearchParams({});
                                     setSelectedCategory('All');
                                 }}
                             />
+                        )}
+
+                        {/* Pagination Mock */}
+                        {filteredProducts.length > 0 && (
+                            <div className="mt-20 flex justify-center">
+                                <button className="btn-outline px-12">Load More Products</button>
+                            </div>
                         )}
                     </div>
                 </div>
