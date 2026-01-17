@@ -27,6 +27,7 @@ export default function ProductCard({ product }) {
                     </Link>
 
                     {/* Wishlist - Only Show on Hover or if Wishlisted */}
+                    {/* Wishlist - Always Visible for Mobile Accessibility */}
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -34,7 +35,8 @@ export default function ProductCard({ product }) {
                             const isAdding = !isWishlisted;
                             toast.success(isAdding ? 'Saved to Favorites' : 'Removed from Favorites');
                         }}
-                        className={`absolute top-2 right-2 p-2 rounded-full transition-all ${isWishlisted ? 'opacity-100 text-red-600' : 'opacity-0 group-hover:opacity-100 bg-white shadow-sm text-gray-900'}`}
+                        className={`absolute top-2 right-2 p-2 rounded-full transition-all bg-white shadow-sm text-gray-900 ${isWishlisted ? 'text-red-600' : 'text-gray-900'}`}
+                        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                     >
                         <Heart size={18} className={isWishlisted ? 'fill-current' : ''} />
                     </button>
